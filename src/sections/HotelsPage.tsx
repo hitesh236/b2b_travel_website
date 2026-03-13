@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -11,7 +12,6 @@ import {
   Coffee,
   Dumbbell,
   Waves,
-  Car,
   Utensils,
   Sparkles,
   Check,
@@ -55,14 +55,10 @@ const amenityIcons: Record<string, React.ElementType> = {
   'Gym': Dumbbell,
   'Spa': Sparkles,
   'Restaurant': Utensils,
-  'Parking': Car,
 };
 
-interface HotelsPageProps {
-  onViewDetail: (id: string) => void;
-}
-
-function HotelCard({ hotel, onViewDetail }: { hotel: typeof hotels[0]; onViewDetail: (id: string) => void }) {
+function HotelCard({ hotel }: { hotel: typeof hotels[0] }) {
+  const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -90,7 +86,6 @@ function HotelCard({ hotel, onViewDetail }: { hotel: typeof hotels[0]; onViewDet
       onHoverEnd={() => setIsHovered(false)}
       className="bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-500 overflow-hidden group border border-transparent hover:border-gray-100 flex flex-col h-full"
     >
-      {/* Image Container - Compact */}
       <div className="relative h-40 overflow-hidden">
         <motion.img 
           src={hotel.image} 
@@ -101,14 +96,12 @@ function HotelCard({ hotel, onViewDetail }: { hotel: typeof hotels[0]; onViewDet
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         
-        {/* Badge - Compact */}
         <div className="absolute top-2.5 left-2.5">
           <span className={`px-2 py-0.5 rounded-lg text-[9px] uppercase font-bold tracking-wider text-white ${badge.bg} border border-white/10 backdrop-blur-[2px]`}>
             {badge.text}
           </span>
         </div>
 
-        {/* Favorite - Glassmorphic */}
         <div className="absolute top-2.5 right-2.5">
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -120,7 +113,6 @@ function HotelCard({ hotel, onViewDetail }: { hotel: typeof hotels[0]; onViewDet
           </motion.button>
         </div>
 
-        {/* Rating Overlay - Compact */}
         <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5">
           <div className="flex items-center gap-1 bg-white/95 backdrop-blur-sm px-1.5 py-0.5 rounded-lg shadow-sm border border-gray-100">
             <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
@@ -130,9 +122,7 @@ function HotelCard({ hotel, onViewDetail }: { hotel: typeof hotels[0]; onViewDet
         </div>
       </div>
 
-      {/* Content Area - Optimized Padding */}
       <div className="p-3.5 flex flex-col flex-1">
-        {/* Title and Stars - Unified Row */}
         <div className="flex items-start justify-between gap-1 mb-1.5">
           <div className="min-w-0">
             <h3 className="font-bold text-base text-travel-text truncate group-hover:text-travel-blue transition-colors leading-tight">
@@ -153,7 +143,6 @@ function HotelCard({ hotel, onViewDetail }: { hotel: typeof hotels[0]; onViewDet
           </div>
         </div>
 
-        {/* Amenities - More subtle tags */}
         <div className="flex flex-wrap gap-1 mb-3 pt-2 border-t border-gray-50 mt-1">
           {hotel.amenities.slice(0, 3).map((amenity, i) => {
             const Icon = amenityIcons[amenity] || Check;
@@ -169,7 +158,6 @@ function HotelCard({ hotel, onViewDetail }: { hotel: typeof hotels[0]; onViewDet
           })}
         </div>
 
-        {/* Price & Action - Compact Row */}
         <div className="mt-auto pt-2.5 border-t border-gray-50 flex items-center justify-between">
           <div className="flex flex-col">
             <div className="flex items-baseline gap-0.5">
@@ -180,7 +168,7 @@ function HotelCard({ hotel, onViewDetail }: { hotel: typeof hotels[0]; onViewDet
           </div>
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <Button 
-              onClick={() => onViewDetail(hotel.id)}
+              onClick={() => navigate(`/hotel/${hotel.id}`)}
               className="gradient-blue text-white h-8 px-4 rounded-lg text-[10px] font-bold shadow-glow-blue transition-all"
             >
               Book Now
@@ -192,7 +180,7 @@ function HotelCard({ hotel, onViewDetail }: { hotel: typeof hotels[0]; onViewDet
   );
 }
 
-export default function HotelsPage({ onViewDetail }: HotelsPageProps) {
+export default function HotelsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState('recommended');
@@ -331,7 +319,7 @@ export default function HotelsPage({ onViewDetail }: HotelsPageProps) {
         {/* Hotel Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredHotels.map((hotel) => (
-            <HotelCard key={hotel.id} hotel={hotel} onViewDetail={onViewDetail} />
+            <HotelCard key={hotel.id} hotel={hotel} />
           ))}
         </div>
 

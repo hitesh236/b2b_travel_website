@@ -12,7 +12,7 @@ export default function Hero() {
       const { clientX, clientY } = e;
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
-      
+
       cards.forEach((card, index) => {
         const factor = (index + 1) * 0.02;
         const rotateX = (clientY - centerY) * factor;
@@ -34,7 +34,7 @@ export default function Hero() {
       {/* Animated Background */}
       <div className="absolute inset-0 gradient-hero">
         <div className="absolute inset-0 bg-gradient-to-br from-travel-blue/90 via-travel-blue-dark/90 to-travel-green/80" />
-        
+
         {/* Animated Orbs */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-travel-orange/20 rounded-full blur-3xl animate-float-slow" />
@@ -42,7 +42,7 @@ export default function Hero() {
       </div>
 
       {/* Grid Pattern Overlay */}
-      <div 
+      <div
         className="absolute inset-0 opacity-10"
         style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
@@ -75,7 +75,7 @@ export default function Hero() {
             </p>
 
             <div className="flex flex-wrap gap-4 animate-slide-up" style={{ animationDelay: '0.4s' }}>
-              <Button 
+              <Button
                 size="lg"
                 className="bg-white text-travel-blue px-8 py-6 rounded-full font-semibold hover:bg-white/90 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group"
                 onClick={scrollToSearch}
@@ -83,10 +83,10 @@ export default function Hero() {
                 Start Booking
                 <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button 
+              <Button
                 size="lg"
                 variant="outline"
-                className="border-2 border-white/30 text-white px-8 py-6 rounded-full font-semibold hover:bg-white/10 transition-all duration-300"
+                className="border-2 border-white/30 bg-white text-travel-blue px-8 py-6 rounded-full font-semibold "
                 onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Learn More
@@ -97,7 +97,7 @@ export default function Hero() {
             <div className="flex items-center gap-6 pt-4 animate-slide-up" style={{ animationDelay: '0.5s' }}>
               <div className="flex -space-x-3">
                 {[1, 2, 3].map((i) => (
-                  <div 
+                  <div
                     key={i}
                     className="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-travel-blue to-travel-green flex items-center justify-center text-white text-xs font-bold"
                   >
@@ -115,13 +115,13 @@ export default function Hero() {
           {/* Right Content - Floating Cards */}
           <div ref={cardsRef} className="relative hidden lg:block h-[500px]">
             {/* Card 1 */}
-            <div 
+            <div
               className="hero-card absolute top-0 right-0 w-72 h-96 rounded-2xl overflow-hidden shadow-2xl transition-transform duration-200 animate-scale-in"
               style={{ animationDelay: '0.6s' }}
             >
-              <img 
-                src="/images/hero-card1.jpg" 
-                alt="Tropical Resort" 
+              <img
+                src="/images/hero-card1.jpg"
+                alt="Tropical Resort"
                 className="w-full h-full object-cover"
               />
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
@@ -131,13 +131,13 @@ export default function Hero() {
             </div>
 
             {/* Card 2 */}
-            <div 
+            <div
               className="hero-card absolute top-20 left-0 w-64 h-80 rounded-2xl overflow-hidden shadow-2xl transition-transform duration-200 animate-scale-in"
               style={{ animationDelay: '0.8s' }}
             >
-              <img 
-                src="/images/hero-card2.jpg" 
-                alt="Mountain Landscape" 
+              <img
+                src="/images/hero-card2.jpg"
+                alt="Mountain Landscape"
                 className="w-full h-full object-cover"
               />
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
@@ -147,13 +147,13 @@ export default function Hero() {
             </div>
 
             {/* Card 3 */}
-            <div 
+            <div
               className="hero-card absolute bottom-0 left-20 w-60 h-72 rounded-2xl overflow-hidden shadow-2xl transition-transform duration-200 animate-scale-in"
               style={{ animationDelay: '1s' }}
             >
-              <img 
-                src="/images/hero-card3.jpg" 
-                alt="City Skyline" 
+              <img
+                src="/images/hero-card3.jpg"
+                alt="City Skyline"
                 className="w-full h-full object-cover"
               />
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
@@ -163,7 +163,7 @@ export default function Hero() {
             </div>
 
             {/* Floating Badge */}
-            <div 
+            <div
               className="absolute top-10 right-20 px-4 py-2 rounded-full bg-white shadow-lg animate-bounce-in"
               style={{ animationDelay: '1.2s' }}
             >
@@ -179,8 +179,8 @@ export default function Hero() {
       {/* Bottom Wave */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path 
-            d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" 
+          <path
+            d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
             fill="#f8f9fa"
           />
         </svg>

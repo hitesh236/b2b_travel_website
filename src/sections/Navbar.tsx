@@ -1,35 +1,32 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Plane, LayoutDashboard, Hotel, Package } from 'lucide-react';
-
-interface NavbarProps {
-  currentSection: string;
-  onNavigate: (section: string) => void;
-}
+import { Menu, X, Plane, Home, Hotel, Package } from 'lucide-react';
 
 const navItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'flights', label: 'Flights', icon: Plane },
-  { id: 'hotels', label: 'Hotels', icon: Hotel },
-  { id: 'packages', label: 'Packages', icon: Package },
+  { id: 'home', label: 'Home', icon: Home, path: '/' },
+  { id: 'flights', label: 'Flights', icon: Plane, path: '/flights' },
+  { id: 'hotels', label: 'Hotels', icon: Hotel, path: '/hotels' },
+  { id: 'packages', label: 'Packages', icon: Package, path: '/packages' },
 ];
 
-export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
+export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleNavClick = (sectionId: string) => {
-    onNavigate(sectionId);
+  const handleNavClick = (path: string) => {
+    navigate(path);
     setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Check if we're on a detail page
-  const isDetailPage = ['flight', 'hotel', 'package'].includes(currentSection);
-  const effectiveSection = isDetailPage ? 
-    (currentSection === 'flight' ? 'flights' : 
-     currentSection === 'hotel' ? 'hotels' : 'packages') 
-    : currentSection;
+  const isActive = (path: string) => {
+    if (path === '/' && location.pathname === '/') return true;
+    if (path !== '/' && location.pathname.startsWith(path)) return true;
+    return false;
+  };
 
   return (
     <motion.nav
@@ -46,7 +43,7 @@ export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="flex items-center gap-2 cursor-pointer"
-              onClick={() => handleNavClick('dashboard')}
+              onClick={() => handleNavClick('/')}
             >
               <motion.div 
                 whileHover={{ rotate: 15 }}
@@ -65,7 +62,7 @@ export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
           <div className="hidden md:flex items-center justify-center gap-2">
             {navItems.map((item, index) => {
               const Icon = item.icon;
-              const isActive = effectiveSection === item.id;
+              const active = isActive(item.path);
               
               return (
                 <motion.button
@@ -73,16 +70,16 @@ export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
-                  onClick={() => handleNavClick(item.id)}
+                  onClick={() => handleNavClick(item.path)}
                   className={`relative flex items-center gap-2 px-4 py-2.5 rounded-full font-medium transition-all duration-300 ${
-                    isActive
+                    active
                       ? 'gradient-blue text-white shadow-lg'
                       : 'text-travel-text hover:bg-gray-100'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
                   {item.label}
-                  {isActive && (
+                  {active && (
                     <motion.div
                       layoutId="activeNav"
                       className="absolute inset-0 gradient-blue rounded-full -z-10"
@@ -103,7 +100,7 @@ export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
               >
                 <Button 
                   className="gradient-blue text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-glow transition-all duration-300"
-                  onClick={() => handleNavClick('flights')}
+                  onClick={() => handleNavClick('/flights')}
                 >
                   Book Now
                 </Button>
@@ -162,7 +159,7 @@ export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
               >
                 {navItems.map((item, index) => {
                   const Icon = item.icon;
-                  const isActive = effectiveSection === item.id;
+                  const active = isActive(item.path);
                   
                   return (
                     <motion.button
@@ -171,9 +168,9 @@ export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
-                      onClick={() => handleNavClick(item.id)}
+                      onClick={() => handleNavClick(item.path)}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
-                        isActive
+                        active
                           ? 'gradient-blue text-white'
                           : 'text-travel-text hover:bg-gray-100'
                       }`}
@@ -192,7 +189,7 @@ export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
                 >
                   <Button 
                     className="w-full gradient-blue text-white py-3 rounded-xl font-semibold"
-                    onClick={() => handleNavClick('flights')}
+                    onClick={() => handleNavClick('/flights')}
                   >
                     Book Now
                   </Button>

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
@@ -327,7 +328,8 @@ function DestinationCard({ destination, index }: { destination: any; index: numb
   );
 }
 
-export default function Dashboard({ onNavigate }: { onNavigate: (section: string) => void }) {
+export default function Dashboard() {
+  const navigate = useNavigate();
   const [greeting, setGreeting] = useState('Good morning');
 
   useEffect(() => {
@@ -406,7 +408,7 @@ export default function Dashboard({ onNavigate }: { onNavigate: (section: string
                   key={action.label}
                   whileHover={{ scale: 1.05, y: -1 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => onNavigate(action.section)}
+                  onClick={() => navigate(`/${action.section}`)}
                   className={`flex items-center gap-1.5 ${action.color} text-white px-3 h-8 rounded-lg text-[10px] font-bold shadow-sm hover:shadow-md transition-all`}
                 >
                   <action.icon className="w-3 h-3" />

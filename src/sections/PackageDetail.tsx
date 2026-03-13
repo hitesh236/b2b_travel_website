@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -46,12 +47,9 @@ const itemVariants = {
   }
 };
 
-interface PackageDetailProps {
-  packageId: string;
-  onBack: () => void;
-}
-
-export default function PackageDetail({ packageId, onBack }: PackageDetailProps) {
+export default function PackageDetail() {
+  const { id: packageId } = useParams();
+  const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
   const [travelers, setTravelers] = useState(2);
   const [activeDay, setActiveDay] = useState(0);
@@ -123,7 +121,7 @@ export default function PackageDetail({ packageId, onBack }: PackageDetailProps)
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="min-h-screen bg-travel-bg pt-20 pb-12"
+      className="min-h-screen bg-travel-bg pt-28 pb-12"
     >
       {/* Hero Section - More compact */}
       <motion.div variants={itemVariants} className="relative h-[380px] overflow-hidden">
@@ -142,7 +140,7 @@ export default function PackageDetail({ packageId, onBack }: PackageDetailProps)
           <motion.button
             whileHover={{ x: -2 }}
             whileTap={{ scale: 0.95 }}
-            onClick={onBack}
+            onClick={() => navigate(-1)}
             className="flex items-center gap-2 text-white bg-black/20 hover:bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-xl text-[10px] font-bold border border-white/10 transition-all shadow-lg"
           >
             <ArrowLeft className="w-3.5 h-3.5" />

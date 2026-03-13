@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { 
-  Plane, 
-  Facebook, 
-  Twitter, 
-  Linkedin, 
+import {
+  Plane,
+  Facebook,
+  Twitter,
+  Linkedin,
   Instagram,
   Mail,
   MapPin,
@@ -37,14 +37,14 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="gradient-blue rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
             {/* Background Pattern */}
-            <div 
+            <div
               className="absolute inset-0 opacity-10"
               style={{
                 backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
                 backgroundSize: '30px 30px'
               }}
             />
-            
+
             <div className="relative z-10">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 Ready to Transform Your Corporate Travel?
@@ -53,7 +53,7 @@ export default function Footer() {
                 Join 1000+ companies already saving time and money with TravelAI Pro.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
+                <Button
                   size="lg"
                   className="bg-white text-travel-blue px-8 py-6 rounded-full font-semibold hover:bg-white/90 transition-all duration-300 hover:shadow-xl"
                   onClick={() => document.getElementById('search')?.scrollIntoView({ behavior: 'smooth' })}
@@ -61,13 +61,13 @@ export default function Footer() {
                   Get Started Free
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-                <Button 
+                {/* <Button
                   size="lg"
                   variant="outline"
-                  className="border-2 border-white/30 text-white px-8 py-6 rounded-full font-semibold hover:bg-white/10 transition-all duration-300"
+                  className="border-2 border-white/30 text-white px-8 py-6 rounded-full font-semibold"
                 >
                   Contact Sales
-                </Button>
+                </Button> */}
               </div>
             </div>
           </div>
@@ -91,26 +91,26 @@ export default function Footer() {
               Smart corporate travel solutions powered by AI. Save time, reduce costs, and travel better.
             </p>
             <div className="flex items-center gap-4">
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-travel-blue transition-colors duration-300"
               >
                 <Facebook className="w-5 h-5" />
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-travel-blue transition-colors duration-300"
               >
                 <Twitter className="w-5 h-5" />
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-travel-blue transition-colors duration-300"
               >
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-travel-blue transition-colors duration-300"
               >
                 <Instagram className="w-5 h-5" />
@@ -124,7 +124,7 @@ export default function Footer() {
             <ul className="space-y-4">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <a 
+                  <a
                     href={link.href}
                     className="text-white/60 hover:text-white transition-colors duration-300 inline-flex items-center gap-2 group"
                   >
@@ -142,7 +142,7 @@ export default function Footer() {
             <ul className="space-y-4">
               {footerLinks.support.map((link) => (
                 <li key={link.label}>
-                  <a 
+                  <a
                     href={link.href}
                     className="text-white/60 hover:text-white transition-colors duration-300 inline-flex items-center gap-2 group"
                   >
@@ -163,7 +163,7 @@ export default function Footer() {
             <form onSubmit={handleSubscribe} className="space-y-3">
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-                <Input 
+                <Input
                   type="email"
                   placeholder="Enter your email"
                   value={email}
@@ -171,7 +171,7 @@ export default function Footer() {
                   className="pl-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/40 rounded-xl focus:border-travel-blue focus:ring-travel-blue/20"
                 />
               </div>
-              <Button 
+              <Button
                 type="submit"
                 className="w-full gradient-blue text-white h-12 rounded-xl font-semibold hover:shadow-glow transition-all duration-300"
               >

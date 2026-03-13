@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -45,11 +46,8 @@ const itemVariants = {
   }
 };
 
-interface PackagesPageProps {
-  onViewDetail: (id: string) => void;
-}
-
-function PackageCard({ pkg, featured = false, onViewDetail }: { pkg: typeof packages[0]; featured?: boolean; onViewDetail: (id: string) => void }) {
+function PackageCard({ pkg, featured = false }: { pkg: typeof packages[0]; featured?: boolean }) {
+  const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -155,7 +153,7 @@ function PackageCard({ pkg, featured = false, onViewDetail }: { pkg: typeof pack
                 <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Per Head</span>
               </div>
               <Button 
-                onClick={() => onViewDetail(pkg.id)}
+                onClick={() => navigate(`/package/${pkg.id}`)}
                 className="gradient-blue text-white px-4 h-9 rounded-xl text-[11px] font-bold shadow-glow-blue transition-all flex items-center gap-1.5"
               >
                 View Package
@@ -247,7 +245,7 @@ function PackageCard({ pkg, featured = false, onViewDetail }: { pkg: typeof pack
             <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Per Head</span>
           </div>
           <Button 
-            onClick={() => onViewDetail(pkg.id)}
+            onClick={() => navigate(`/package/${pkg.id}`)}
             className="gradient-blue text-white px-3.5 h-8 rounded-lg text-[10px] font-bold shadow-glow-blue transition-all"
           >
             Details
@@ -258,7 +256,7 @@ function PackageCard({ pkg, featured = false, onViewDetail }: { pkg: typeof pack
   );
 }
 
-export default function PackagesPage({ onViewDetail }: PackagesPageProps) {
+export default function PackagesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState('recommended');
@@ -397,7 +395,6 @@ export default function PackagesPage({ onViewDetail }: PackagesPageProps) {
               key={pkg.id} 
               pkg={pkg} 
               featured={index === 0}
-              onViewDetail={onViewDetail}
             />
           ))}
         </div>

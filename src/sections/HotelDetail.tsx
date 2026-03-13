@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -51,12 +52,9 @@ const fadeIn = {
   visible: { opacity: 1, transition: { duration: 0.5 } }
 };
 
-interface HotelDetailProps {
-  hotelId: string;
-  onBack: () => void;
-}
-
-export default function HotelDetail({ hotelId, onBack }: HotelDetailProps) {
+export default function HotelDetail() {
+  const { id: hotelId } = useParams();
+  const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState('standard');
   const [guests, setGuests] = useState(2);
@@ -142,7 +140,7 @@ export default function HotelDetail({ hotelId, onBack }: HotelDetailProps) {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Image Gallery - More compact */}
-        <motion.div variants={itemVariants} className="mb-6 -mt-16">
+        <motion.div variants={itemVariants} className="mb-6">
           <div className="grid grid-cols-4 grid-rows-2 gap-3 h-[420px]">
             {/* Main Large Image */}
             <motion.div 
@@ -161,7 +159,7 @@ export default function HotelDetail({ hotelId, onBack }: HotelDetailProps) {
                 <motion.button
                   whileHover={{ x: -3 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={onBack}
+                  onClick={() => navigate(-1)}
                   className="flex items-center gap-1.5 text-white bg-black/20 hover:bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-xl text-[10px] font-bold border border-white/10 transition-all"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
