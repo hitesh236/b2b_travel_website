@@ -17,10 +17,12 @@ import {
   Info,
   Users,
   Sparkles,
-  TrendingDown
+  TrendingDown,
+  Clock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { flights } from '@/data/dummyData';
+import PaymentGateway from '../components/PaymentGateway';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -80,6 +82,7 @@ export default function FlightDetail({ flightId, onBack }: FlightDetailProps) {
   const [selectedClass, setSelectedClass] = useState('economy');
   const [travelers, setTravelers] = useState(1);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
 
   const flight = flights.find(f => f.id === flightId) || flights[0];
 
@@ -113,73 +116,71 @@ export default function FlightDetail({ flightId, onBack }: FlightDetailProps) {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="min-h-screen bg-travel-bg pt-20 pb-12"
+      className="min-h-screen bg-travel-bg pt-28 pb-12"
     >
-      {/* Header */}
-      <motion.div variants={itemVariants} className="bg-white shadow-sm sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <motion.button
-              whileHover={{ x: -5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={onBack}
-              className="flex items-center gap-2 text-travel-text hover:text-travel-blue transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span className="font-medium">Back to Flights</span>
-            </motion.button>
-            <div className="flex items-center gap-3">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setIsLiked(!isLiked)}
-                className={`p-3 rounded-full transition-colors ${isLiked ? 'bg-red-50' : 'bg-gray-100 hover:bg-gray-200'}`}
-              >
-                <Heart className={`w-5 h-5 transition-colors ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-              >
-                <Share2 className="w-5 h-5 text-gray-400" />
-              </motion.button>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div className="grid lg:grid-cols-3 gap-6">
           {/* Left Column - Flight Details */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Flight Card */}
-            <motion.div variants={slideInLeft} className="bg-white rounded-3xl shadow-card overflow-hidden">
-              <div className="relative h-48">
+            {/* Flight Card - Compact */}
+             <motion.div variants={slideInLeft} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative">
+              <div className="relative h-40">
                 <img src={flight.image} alt={flight.airline} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                
+                {/* Integrated Back Button */}
+                <div className="absolute top-4 left-4 z-10">
+                  <motion.button
+                    whileHover={{ x: -3 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={onBack}
+                    className="flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-xl text-[10px] font-bold border border-white/20 transition-all shadow-lg"
+                  >
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    Back to Flights
+                  </motion.button>
+                </div>
+
+                {/* Integrated Action Buttons */}
+                <div className="absolute top-4 right-4 z-10 flex gap-2">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setIsLiked(!isLiked)}
+                    className={`w-8 h-8 rounded-xl backdrop-blur-md flex items-center justify-center border border-white/20 transition-all ${isLiked ? 'bg-red-500 text-white shadow-glow-red' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                  >
+                    <Heart className={`w-3.5 h-3.5 ${isLiked ? 'fill-current' : ''}`} />
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20 text-white transition-all shadow-lg"
+                  >
+                    <Share2 className="w-3.5 h-3.5" />
+                  </motion.button>
+                </div>
+
+                <div className="absolute bottom-4 left-4 right-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <motion.h1 
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-3xl font-bold text-white mb-2"
+                        className="text-2xl font-bold text-white mb-1"
                       >
                         {flight.airline}
                       </motion.h1>
-                      <div className="flex items-center gap-4 text-white/80">
-                        <span className="flex items-center gap-1">
-                          <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                          {flight.rating} ({Math.floor(Math.random() * 2000 + 500)} reviews)
+                      <div className="flex items-center gap-2 text-white/90 text-[11px]">
+                        <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-lg backdrop-blur-md border border-white/10 font-bold">
+                          <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                          {flight.rating}
                         </span>
-                        <span>{flight.airlineCode}</span>
+                        <span className="font-bold tracking-widest uppercase opacity-80">{flight.airlineCode}</span>
                       </div>
                     </div>
                     {flight.badge && (
-                      <span className="px-4 py-2 bg-green-500 text-white rounded-full text-sm font-semibold flex items-center gap-1">
-                        <TrendingDown className="w-4 h-4" />
+                      <span className="px-2.5 py-1.5 bg-green-500/90 backdrop-blur-sm text-white rounded-xl text-[10px] font-bold flex items-center gap-1.5 shadow-lg border border-white/10">
+                        <TrendingDown className="w-3.5 h-3.5" />
                         {flight.badge}
                       </span>
                     )}
@@ -188,55 +189,46 @@ export default function FlightDetail({ flightId, onBack }: FlightDetailProps) {
               </div>
 
               <div className="p-6">
-                {/* Route Timeline */}
-                <div className="flex items-center justify-between mb-8">
-                  <div className="text-center">
-                    <p className="text-4xl font-bold text-travel-text">{flight.departure}</p>
-                    <p className="text-lg text-travel-text-secondary">{flight.fromCode}</p>
-                    <p className="text-sm text-travel-text-secondary">{flight.from}</p>
+                {/* Route Timeline - Compact */}
+                <div className="flex items-center justify-between mb-6 px-2">
+                  <div className="text-center w-24">
+                    <p className="text-3xl font-bold text-travel-text leading-tight">{flight.departure}</p>
+                    <p className="text-xs font-bold text-travel-text-secondary uppercase tracking-wider">{flight.fromCode}</p>
+                    <p className="text-[11px] text-gray-400 truncate">{flight.from}</p>
                   </div>
 
-                  <div className="flex-1 px-8">
-                    <div className="relative">
-                      <div className="border-t-2 border-dashed border-gray-300" />
-                      <motion.div 
-                        animate={{ x: [0, 100, 0] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute top-1/2 left-0 -translate-y-1/2"
-                      >
-                        <div className="w-10 h-10 rounded-full bg-travel-blue flex items-center justify-center shadow-lg">
-                          <Plane className="w-5 h-5 text-white rotate-90" />
-                        </div>
-                      </motion.div>
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-1 rounded-full border border-gray-200">
-                        <span className="text-sm font-medium text-travel-text">{flight.duration}</span>
+                  <div className="flex-1 px-4">
+                    <div className="relative flex items-center justify-center">
+                      <div className="w-full h-[1px] bg-gray-200 border-t border-dashed border-gray-400" />
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 flex flex-col items-center">
+                        <span className="text-[10px] text-gray-400 font-bold uppercase mb-1">{flight.duration}</span>
+                        <Plane className="w-4 h-4 text-travel-blue rotate-90" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="text-center">
-                    <p className="text-4xl font-bold text-travel-text">{flight.arrival}</p>
-                    <p className="text-lg text-travel-text-secondary">{flight.toCode}</p>
-                    <p className="text-sm text-travel-text-secondary">{flight.to}</p>
+                  <div className="text-center w-24">
+                    <p className="text-3xl font-bold text-travel-text leading-tight">{flight.arrival}</p>
+                    <p className="text-xs font-bold text-travel-text-secondary uppercase tracking-wider">{flight.toCode}</p>
+                    <p className="text-[11px] text-gray-400 truncate">{flight.to}</p>
                   </div>
                 </div>
 
-                {/* Tabs */}
-                <div className="flex gap-2 mb-6 border-b border-gray-100">
+                {/* Tabs - Compact */}
+                <div className="flex gap-2 mb-5 border-b border-gray-50 bg-gray-50/30 px-2">
                   {['overview', 'amenities', 'policy'].map((tab) => (
                     <motion.button
                       key={tab}
-                      whileHover={{ y: -2 }}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-6 py-3 font-medium capitalize transition-colors relative ${
-                        activeTab === tab ? 'text-travel-blue' : 'text-travel-text-secondary hover:text-travel-text'
+                      className={`px-4 py-2 text-[12px] font-bold capitalize transition-all relative ${
+                        activeTab === tab ? 'text-travel-blue' : 'text-gray-400 hover:text-travel-text'
                       }`}
                     >
                       {tab}
                       {activeTab === tab && (
                         <motion.div
                           layoutId="activeTab"
-                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-travel-blue"
+                          className="absolute bottom-0 left-0 right-0 h-[2px] bg-travel-blue"
                         />
                       )}
                     </motion.button>
@@ -254,35 +246,77 @@ export default function FlightDetail({ flightId, onBack }: FlightDetailProps) {
                       className="space-y-6"
                     >
                       {/* Timeline */}
-                      <div className="space-y-4">
-                        {timeline.map((item, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: -20 }}
+                      {/* High-Fidelity Horizontal Flex Timeline - Final Polish */}
+                      <div className="relative bg-gray-50/50 rounded-2xl p-5 border border-gray-100 overflow-hidden group">
+                        {/* Abstract Background Decoration */}
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-travel-blue/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-travel-blue/10 transition-all duration-700" />
+                        
+                        <div className="flex items-center justify-between relative z-10">
+                          {/* Departure Block - Smaller Font */}
+                          <motion.div 
+                            initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.1 * index }}
-                            className="flex items-center gap-4"
+                            className="text-left w-24"
                           >
-                            <div className="w-16 text-right">
-                              <p className="font-semibold text-travel-text">{item.time}</p>
-                            </div>
-                            <div className="relative">
-                              <div className="w-4 h-4 rounded-full bg-travel-blue" />
-                              {index < timeline.length - 1 && (
-                                <div className="absolute top-4 left-1/2 -translate-x-1/2 w-0.5 h-12 bg-gray-200" />
-                              )}
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-semibold text-travel-text">{item.action}</p>
-                              {item.airport && (
-                                <p className="text-sm text-travel-text-secondary">{item.airport} - {item.city}</p>
-                              )}
-                              {item.duration && (
-                                <p className="text-sm text-travel-text-secondary">Duration: {item.duration}</p>
-                              )}
+                            <p className="text-2xl font-bold text-travel-text tracking-tighter leading-none mb-1.5">{timeline[0].time}</p>
+                            <h4 className="text-[10px] font-bold text-travel-blue uppercase tracking-widest mb-1">{timeline[0].action}</h4>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[11px] font-bold text-travel-text-secondary">{timeline[0].airport}</span>
+                              <div className="w-0.5 h-0.5 rounded-full bg-gray-300" />
+                              <span className="text-[9px] font-medium text-gray-500 truncate">{timeline[0].city}</span>
                             </div>
                           </motion.div>
-                        ))}
+
+                          {/* Flight Path Visualizer */}
+                          <div className="flex-1 px-6">
+                            <div className="relative flex flex-col items-center">
+                              {/* Duration Label - More Compact */}
+                              <motion.div 
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="flex items-center gap-1 px-2.5 py-0.5 bg-white rounded-full border border-gray-100 shadow-sm mb-3"
+                              >
+                                <Clock className="w-2.5 h-2.5 text-travel-blue" />
+                                <span className="text-[9px] font-bold text-travel-text-secondary uppercase tracking-tight">{timeline[1].duration}</span>
+                              </motion.div>
+
+                              {/* Dashed Line & Plane - Straight Direction */}
+                              <div className="w-full relative flex items-center justify-center">
+                                <div className="w-full h-[1.5px] bg-gray-100 border-t border-dashed border-gray-400 opacity-40" />
+                                <motion.div 
+                                  initial={{ left: "0%" }}
+                                  animate={{ left: "100%" }}
+                                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                  className="absolute top-1/2 -translate-y-1/2 -ml-2"
+                                >
+                                  {/* rotate-45 is typically 'straight' for the Plane icon in many icon sets, or 0 if it starts horizontal */}
+                                  <Plane className="w-4 h-4 text-travel-blue rotate-45 drop-shadow-sm" />
+                                </motion.div>
+                              </div>
+
+                              {/* Stop Type - Ultra Small Label */}
+                              <p className="mt-3 text-[8px] font-bold text-gray-400 uppercase tracking-[0.25em]">DIRECT FLIGHT</p>
+                            </div>
+                          </div>
+
+                          {/* Arrival Block - Smaller Font */}
+                          <motion.div 
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="text-right w-24"
+                          >
+                            <p className="text-2xl font-bold text-travel-text tracking-tighter leading-none mb-1.5">{timeline[2].time}</p>
+                            <h4 className="text-[10px] font-bold text-travel-green uppercase tracking-widest mb-1">{timeline[2].action}</h4>
+                            <div className="flex items-center justify-end gap-1.5">
+                              <span className="text-[9px] font-medium text-gray-500 truncate">{timeline[2].city}</span>
+                              <div className="w-0.5 h-0.5 rounded-full bg-gray-300" />
+                              <span className="text-[11px] font-bold text-travel-text-secondary">{timeline[2].airport}</span>
+                            </div>
+                          </motion.div>
+                        </div>
+
+                        {/* Animated Ground Highlight */}
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-travel-blue/10 via-gray-100 to-travel-green/10" />
                       </div>
                     </motion.div>
                   )}
@@ -293,7 +327,7 @@ export default function FlightDetail({ flightId, onBack }: FlightDetailProps) {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="grid sm:grid-cols-2 gap-4"
+                      className="grid sm:grid-cols-2 gap-3"
                     >
                       {amenities.map((amenity, index) => (
                         <motion.div
@@ -301,15 +335,14 @@ export default function FlightDetail({ flightId, onBack }: FlightDetailProps) {
                           initial={{ opacity: 0, scale: 0.9 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ delay: 0.05 * index }}
-                          whileHover={{ scale: 1.02, backgroundColor: '#f8f9fa' }}
-                          className="flex items-start gap-4 p-4 rounded-xl transition-colors"
+                          className="flex items-start gap-3 p-3 rounded-xl border border-gray-50 bg-gray-50/20 transition-all hover:bg-gray-50/50"
                         >
-                          <div className="w-12 h-12 rounded-xl bg-travel-blue/10 flex items-center justify-center flex-shrink-0">
-                            <amenity.icon className="w-6 h-6 text-travel-blue" />
+                          <div className="w-10 h-10 rounded-lg bg-travel-blue/10 flex items-center justify-center flex-shrink-0">
+                            <amenity.icon className="w-5 h-5 text-travel-blue" />
                           </div>
                           <div>
-                            <p className="font-semibold text-travel-text">{amenity.label}</p>
-                            <p className="text-sm text-travel-text-secondary">{amenity.description}</p>
+                            <p className="text-[13px] font-bold text-travel-text">{amenity.label}</p>
+                            <p className="text-[11px] text-gray-400 font-medium leading-tight">{amenity.description}</p>
                           </div>
                         </motion.div>
                       ))}
@@ -348,50 +381,51 @@ export default function FlightDetail({ flightId, onBack }: FlightDetailProps) {
               </div>
             </motion.div>
 
-            {/* Class Selection */}
-            <motion.div variants={itemVariants} className="bg-white rounded-3xl shadow-card p-6">
-              <h2 className="text-xl font-bold text-travel-text mb-6">Select Class</h2>
-              <div className="space-y-4">
+            {/* Class Selection - Compact */}
+            <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+              <h2 className="text-sm font-bold text-travel-text uppercase tracking-widest mb-4 opacity-70">Select Cabin Class</h2>
+              <div className="space-y-3">
                 {classOptions.map((option, index) => (
                   <motion.div
                     key={option.id}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 * index }}
-                    whileHover={{ scale: 1.01 }}
                     onClick={() => setSelectedClass(option.id)}
-                    className={`p-5 rounded-2xl border-2 cursor-pointer transition-all ${
+                    className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${
                       selectedClass === option.id
-                        ? 'border-travel-blue bg-travel-blue/5'
-                        : 'border-gray-100 hover:border-gray-200'
+                        ? 'border-travel-blue bg-travel-blue/5 shadow-sm'
+                        : 'border-gray-50 hover:border-gray-100'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                           selectedClass === option.id ? 'border-travel-blue' : 'border-gray-300'
                         }`}>
                           {selectedClass === option.id && (
                             <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              className="w-3 h-3 rounded-full bg-travel-blue"
+                              layoutId={`radio-${option.id}`}
+                              className="w-2 h-2 rounded-full bg-travel-blue"
                             />
                           )}
                         </div>
                         <div>
-                          <p className="font-semibold text-travel-text">{option.name}</p>
-                          <div className="flex gap-2 mt-1">
+                          <p className="text-sm font-bold text-travel-text leading-none mb-1.5">{option.name}</p>
+                          <div className="flex gap-2">
                             {option.features.map((feature, i) => (
-                              <span key={i} className="text-xs text-travel-text-secondary flex items-center gap-1">
-                                <Check className="w-3 h-3" />
+                              <span key={i} className="text-[9px] text-gray-400 font-bold uppercase flex items-center gap-0.5">
+                                <Check className="w-2.5 h-2.5 text-green-500" />
                                 {feature}
                               </span>
                             ))}
                           </div>
                         </div>
                       </div>
-                      <p className="text-2xl font-bold text-travel-text">${option.price}</p>
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-travel-text leading-tight">${option.price}</p>
+                        <p className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Per Person</p>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
@@ -406,96 +440,96 @@ export default function FlightDetail({ flightId, onBack }: FlightDetailProps) {
                 whileHover={{ y: -5 }}
                 className="bg-white rounded-3xl shadow-card-hover p-6"
               >
-                <h2 className="text-xl font-bold text-travel-text mb-6">Booking Summary</h2>
+                <h2 className="text-sm font-bold text-travel-text uppercase tracking-widest mb-5 opacity-70">Booking Summary</h2>
 
-                {/* Travelers */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-travel-text mb-2">Travelers</label>
-                  <div className="flex items-center gap-4">
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => setTravelers(Math.max(1, travelers - 1))}
-                      className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center font-bold text-travel-text"
-                    >
-                      -
-                    </motion.button>
-                    <div className="flex items-center gap-2">
-                      <Users className="w-5 h-5 text-travel-text-secondary" />
-                      <span className="text-xl font-semibold text-travel-text">{travelers}</span>
+                {/* Travelers - Compact */}
+                <div className="mb-4">
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-tight mb-1.5">Passengers</label>
+                  <div className="flex items-center justify-between bg-gray-50 p-1.5 rounded-xl border border-gray-100">
+                    <div className="flex items-center gap-2 px-2">
+                      <Users className="w-3.5 h-3.5 text-travel-blue" />
+                      <span className="text-sm font-bold text-travel-text">{travelers}</span>
                     </div>
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => setTravelers(travelers + 1)}
-                      className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center font-bold text-travel-text"
-                    >
-                      +
-                    </motion.button>
+                    <div className="flex items-center gap-1">
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setTravelers(Math.max(1, travelers - 1))}
+                        className="w-7 h-7 rounded-lg bg-white border border-gray-100 flex items-center justify-center font-bold text-gray-500 shadow-sm"
+                      >
+                        -
+                      </motion.button>
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setTravelers(travelers + 1)}
+                        className="w-7 h-7 rounded-lg bg-white border border-gray-100 flex items-center justify-center font-bold text-gray-500 shadow-sm"
+                      >
+                        +
+                      </motion.button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Price Breakdown */}
-                <div className="space-y-3 mb-6 pb-6 border-b border-gray-100">
-                  <div className="flex justify-between text-travel-text-secondary">
-                    <span>Flight ({selectedOption.name})</span>
-                    <span>${selectedOption.price} x {travelers}</span>
+                {/* Price Breakdown - Compact */}
+                <div className="space-y-2 mb-4 pb-4 border-b border-gray-50 pt-2">
+                  <div className="flex justify-between text-[11px] font-bold text-gray-400 uppercase tracking-tighter">
+                    <span>{selectedOption.name} Base × {travelers}</span>
+                    <span className="text-travel-text">${selectedOption.price * travelers}</span>
                   </div>
-                  <div className="flex justify-between text-travel-text-secondary">
-                    <span>Taxes & Fees</span>
-                    <span>Included</span>
-                  </div>
-                  <div className="flex justify-between text-green-600">
-                    <span className="flex items-center gap-1">
-                      <Sparkles className="w-4 h-4" />
-                      AI Discount
-                    </span>
+                  <div className="flex justify-between text-[11px] font-bold text-green-600 uppercase tracking-tighter">
+                    <span className="flex items-center gap-1">AI Member Discount</span>
                     <span>-$20</span>
                   </div>
                 </div>
 
-                {/* Total */}
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-lg font-semibold text-travel-text">Total</span>
-                  <motion.span 
-                    key={totalPrice}
-                    initial={{ scale: 1.2 }}
-                    animate={{ scale: 1 }}
-                    className="text-3xl font-bold text-travel-text"
-                  >
-                    ${totalPrice - 20}
-                  </motion.span>
+                {/* Total - Compact */}
+                <div className="flex justify-between items-center mb-5 pt-1">
+                  <span className="text-xs font-bold text-travel-text uppercase tracking-widest opacity-60">Total</span>
+                  <div className="text-right">
+                    <motion.p 
+                      key={totalPrice}
+                      initial={{ scale: 1.1 }}
+                      animate={{ scale: 1 }}
+                      className="text-2xl font-bold text-travel-text leading-tight"
+                    >
+                      ${totalPrice - 20}
+                    </motion.p>
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">Tax Inclusive</p>
+                  </div>
                 </div>
 
-                {/* CTA */}
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button className="w-full gradient-blue text-white py-6 rounded-xl font-semibold text-lg hover:shadow-glow transition-all">
-                    Book Now
+                  <Button 
+                    onClick={() => setIsPaymentOpen(true)}
+                    className="w-full h-11 gradient-blue text-white rounded-xl font-bold text-sm shadow-glow-blue transition-all flex items-center justify-center gap-2 group"
+                  >
+                    Complete Booking
                   </Button>
                 </motion.div>
 
-                <p className="text-center text-sm text-travel-text-secondary mt-4">
-                  No hidden fees. Free cancellation within 24h.
-                </p>
+                <div className="mt-4 text-center">
+                  <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest opacity-60">Secure Checkout • 24/7 Support</p>
+                </div>
               </motion.div>
 
-              {/* Trust Badges */}
+              {/* Trust Badges - Mini */}
               <motion.div 
                 variants={scaleIn}
-                className="mt-6 bg-white rounded-2xl shadow-card p-4"
+                className="mt-4 bg-gray-50/50 rounded-xl p-3 border border-gray-100"
               >
-                <div className="flex items-center justify-center gap-6">
-                  <div className="text-center">
-                    <Shield className="w-8 h-8 text-green-500 mx-auto mb-1" />
-                    <p className="text-xs text-travel-text-secondary">Secure</p>
+                <div className="flex items-center justify-around">
+                  <div className="flex flex-col items-center gap-1">
+                    <Shield className="w-5 h-5 text-green-500/70" />
+                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Secure</p>
                   </div>
-                  <div className="text-center">
-                    <Check className="w-8 h-8 text-travel-blue mx-auto mb-1" />
-                    <p className="text-xs text-travel-text-secondary">Verified</p>
+                  <div className="w-px h-6 bg-gray-200" />
+                  <div className="flex flex-col items-center gap-1">
+                    <Check className="w-5 h-5 text-travel-blue/70" />
+                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Verified</p>
                   </div>
-                  <div className="text-center">
-                    <Sparkles className="w-8 h-8 text-travel-orange mx-auto mb-1" />
-                    <p className="text-xs text-travel-text-secondary">AI Pick</p>
+                  <div className="w-px h-6 bg-gray-200" />
+                  <div className="flex flex-col items-center gap-1">
+                    <Sparkles className="w-5 h-5 text-travel-orange/70" />
+                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">AI Pick</p>
                   </div>
                 </div>
               </motion.div>
@@ -503,6 +537,16 @@ export default function FlightDetail({ flightId, onBack }: FlightDetailProps) {
           </motion.div>
         </div>
       </div>
+
+      <PaymentGateway 
+        isOpen={isPaymentOpen}
+        onClose={() => setIsPaymentOpen(false)}
+        amount={totalPrice - 20}
+        onSuccess={() => {
+          setIsPaymentOpen(false);
+          // Potential success notification
+        }}
+      />
     </motion.div>
   );
 }

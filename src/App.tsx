@@ -15,13 +15,13 @@ type SectionType = 'dashboard' | 'flights' | 'hotels' | 'packages';
 type DetailType = 'flight' | 'hotel' | 'package' | null;
 
 const pageTransitionVariants = {
-  initial: { 
-    opacity: 0, 
+  initial: {
+    opacity: 0,
     y: 20,
     scale: 0.98
   },
-  animate: { 
-    opacity: 1, 
+  animate: {
+    opacity: 1,
     y: 0,
     scale: 1,
     transition: {
@@ -29,8 +29,8 @@ const pageTransitionVariants = {
       ease: [0.16, 1, 0.3, 1] as const
     }
   },
-  exit: { 
-    opacity: 0, 
+  exit: {
+    opacity: 0,
     y: -20,
     scale: 0.98,
     transition: {
@@ -92,11 +92,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar 
-        currentSection={detailType || currentSection} 
-        onNavigate={handleNavigate} 
+      <Navbar
+        currentSection={detailType || currentSection}
+        onNavigate={handleNavigate}
       />
-      
+
       <main className="relative">
         <AnimatePresence mode="wait">
           <motion.div

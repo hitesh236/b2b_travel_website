@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Plane, 
-  Hotel, 
-  Package, 
-  TrendingUp, 
+import {
+  Plane,
+  Hotel,
+  Package,
+  TrendingUp,
   TrendingDown,
   DollarSign,
   Users,
@@ -53,7 +53,7 @@ function AnimatedCounter({ value, prefix = '', suffix = '', duration = 2 }: { va
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
-      
+
       // Easing function for smooth animation
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       setCount(Math.floor(easeOutQuart * value));
@@ -75,50 +75,50 @@ function AnimatedCounter({ value, prefix = '', suffix = '', duration = 2 }: { va
 }
 
 // Stat Card Component
-function StatCard({ 
-  title, 
-  value, 
-  prefix = '', 
-  suffix = '', 
-  change, 
-  changeType, 
-  icon: Icon, 
+function StatCard({
+  title,
+  value,
+  prefix = '',
+  suffix = '',
+  change,
+  changeType,
+  icon: Icon,
   color,
-  delay = 0 
-}: { 
-  title: string; 
-  value: number; 
-  prefix?: string; 
-  suffix?: string; 
-  change: string; 
-  changeType: 'up' | 'down'; 
-  icon: React.ElementType; 
+  delay = 0
+}: {
+  title: string;
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  change: string;
+  changeType: 'up' | 'down';
+  icon: React.ElementType;
   color: string;
   delay?: number;
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] as const }}
-      whileHover={{ y: -8, transition: { duration: 0.3 } }}
-      className="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-shadow duration-300 cursor-pointer group"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] as const }}
+      className="bg-white rounded-xl p-3.5 shadow-sm border border-gray-100 cursor-pointer group transition-all hover:shadow-md"
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className={`w-12 h-12 rounded-xl ${color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-          <Icon className="w-6 h-6 text-white" />
+      <div className="flex items-center justify-between mb-2.5">
+        <div className={`w-8 h-8 rounded-lg ${color} flex items-center justify-center group-hover:rotate-6 transition-transform shadow-sm`}>
+          <Icon className="w-4 h-4 text-white" />
         </div>
-        <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-sm font-medium ${
-          changeType === 'up' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-        }`}>
-          {changeType === 'up' ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+        <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[9px] font-bold ${changeType === 'up' ? 'bg-green-50 text-green-600 border border-green-100' : 'bg-red-50 text-red-600 border border-red-100'
+          }`}>
+          {changeType === 'up' ? <ArrowUpRight className="w-2.5 h-2.5" /> : <ArrowDownRight className="w-2.5 h-2.5" />}
           {change}
         </div>
       </div>
-      <h3 className="text-travel-text-secondary text-sm font-medium mb-1">{title}</h3>
-      <p className="text-3xl font-bold text-travel-text">
-        <AnimatedCounter value={value} prefix={prefix} suffix={suffix} />
-      </p>
+      <div>
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">{title}</p>
+        <h4 className="text-xl font-bold text-travel-text tracking-tighter">
+          <AnimatedCounter value={value} prefix={prefix} suffix={suffix} />
+        </h4>
+      </div>
     </motion.div>
   );
 }
@@ -126,9 +126,9 @@ function StatCard({
 // Recent Booking Card
 function RecentBooking({ booking, index }: { booking: any; index: number }) {
   const statusColors = {
-    confirmed: 'bg-green-100 text-green-700',
-    pending: 'bg-yellow-100 text-yellow-700',
-    cancelled: 'bg-red-100 text-red-700',
+    confirmed: 'bg-green-50 text-green-600 border-green-100 font-bold',
+    pending: 'bg-orange-50 text-orange-600 border-orange-100 font-bold',
+    cancelled: 'bg-red-50 text-red-600 border-red-100 font-bold',
   };
 
   const statusIcons = {
@@ -144,10 +144,10 @@ function RecentBooking({ booking, index }: { booking: any; index: number }) {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.8 + index * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
-      whileHover={{ x: 8, backgroundColor: '#f8f9fa' }}
-      className="flex items-center gap-4 p-4 rounded-xl transition-colors cursor-pointer"
+      whileHover={{ scale: 1.01, backgroundColor: '#f9fafb' }}
+      className="flex items-center gap-4 p-3.5 rounded-xl transition-all cursor-pointer border border-transparent hover:border-gray-100 group"
     >
-      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-travel-blue/20 to-travel-green/20 flex items-center justify-center flex-shrink-0">
+      <div className="w-11 h-11 rounded-xl bg-gray-50 flex items-center justify-center flex-shrink-0 group-hover:bg-white group-hover:shadow-sm transition-all duration-300">
         {booking.type === 'flight' ? (
           <Plane className="w-5 h-5 text-travel-blue" />
         ) : booking.type === 'hotel' ? (
@@ -157,24 +157,27 @@ function RecentBooking({ booking, index }: { booking: any; index: number }) {
         )}
       </div>
       <div className="flex-1 min-w-0">
-        <h4 className="font-semibold text-travel-text truncate">{booking.title}</h4>
-        <div className="flex items-center gap-3 text-sm text-travel-text-secondary">
-          <span className="flex items-center gap-1">
-            <Calendar className="w-3 h-3" />
-            {booking.date}
-          </span>
-          <span className="flex items-center gap-1">
-            <MapPin className="w-3 h-3" />
-            {booking.location}
-          </span>
+        <div className="flex items-center justify-between mb-1">
+          <h4 className="font-bold text-travel-text truncate text-[15px]">{booking.title}</h4>
+          <span className="font-bold text-travel-blue text-[15px] ml-2 flex-shrink-0">${booking.amount}</span>
         </div>
-      </div>
-      <div className="text-right">
-        <p className="font-bold text-travel-text">${booking.amount}</p>
-        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${statusColors[booking.status as keyof typeof statusColors]}`}>
-          <StatusIcon className="w-3 h-3" />
-          {booking.status}
-        </span>
+        <div className="flex flex-wrap items-center justify-between gap-y-2">
+          <div className="flex items-center gap-3 text-xs text-travel-text-secondary font-medium">
+            <div className="flex items-center gap-1.5 whitespace-nowrap">
+              <Calendar className="w-3.5 h-3.5 opacity-60" />
+              <span>{booking.date}</span>
+            </div>
+            <div className="w-1 h-1 rounded-full bg-gray-300 hidden sm:block" />
+            <div className="flex items-center gap-1.5 whitespace-nowrap">
+              <MapPin className="w-3.5 h-3.5 opacity-60" />
+              <span>{booking.location}</span>
+            </div>
+          </div>
+          <div className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider border flex-shrink-0 ${statusColors[booking.status as keyof typeof statusColors]}`}>
+            <StatusIcon className="w-3 h-3" />
+            {booking.status}
+          </div>
+        </div>
       </div>
     </motion.div>
   );
@@ -186,18 +189,15 @@ function AIInsight({ insight, index }: { insight: any; index: number }) {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, delay: 1 + index * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
-      whileHover={{ scale: 1.02 }}
-      className="bg-gradient-to-br from-travel-blue/5 to-travel-green/5 rounded-xl p-4 border border-travel-blue/10 cursor-pointer group"
+      transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+      className="bg-white/40 backdrop-blur-md rounded-xl p-3.5 border border-white/60 shadow-sm cursor-pointer group flex items-start gap-3.5 transition-all duration-300 hover:bg-white/60 hover:shadow-md"
     >
-      <div className="flex items-start gap-3">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-travel-blue to-travel-green flex items-center justify-center flex-shrink-0 group-hover:rotate-12 transition-transform duration-300">
-          <Sparkles className="w-4 h-4 text-white" />
-        </div>
-        <div>
-          <h4 className="font-semibold text-travel-text text-sm mb-1">{insight.title}</h4>
-          <p className="text-xs text-travel-text-secondary">{insight.description}</p>
-        </div>
+      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-travel-blue to-travel-green flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-500 shadow-blue">
+        <Sparkles className="w-4 h-4 text-white" />
+      </div>
+      <div>
+        <h4 className="font-bold text-travel-text text-[13px] mb-0.5 group-hover:text-travel-blue transition-colors leading-tight">{insight.title}</h4>
+        <p className="text-[10px] text-gray-400 font-medium leading-tight opacity-70">{insight.description}</p>
       </div>
     </motion.div>
   );
@@ -221,43 +221,61 @@ function SpendingChart() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
-      className="bg-white rounded-2xl p-6 shadow-card"
+      className="bg-white rounded-2xl p-6 shadow-card border border-gray-100 relative overflow-hidden"
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h3 className="font-bold text-travel-text text-lg">Travel Spending</h3>
-          <p className="text-sm text-travel-text-secondary">Monthly overview</p>
+          <h3 className="font-bold text-travel-text text-lg">Spending Overview</h3>
+          <p className="text-sm text-travel-text-secondary">Track your monthly travel expenses</p>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-travel-text">$32,300</span>
-          <span className="flex items-center gap-1 text-sm text-green-600 bg-green-100 px-2 py-1 rounded-full">
-            <TrendingUp className="w-4 h-4" />
-            +12%
-          </span>
+        <div className="flex items-center gap-4">
+          <div className="text-right">
+            <p className="text-2xl font-bold text-travel-text tracking-tight">$32,300</p>
+            <div className="flex items-center justify-end gap-1 text-xs font-bold text-green-600">
+              <TrendingUp className="w-3 h-3" />
+              +12.5%
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="flex items-end justify-between gap-2 h-48">
-        {data.map((item, index) => (
-          <motion.div
-            key={item.month}
-            initial={{ height: 0 }}
-            animate={{ height: `${(item.amount / maxAmount) * 100}%` }}
-            transition={{ duration: 0.8, delay: 0.6 + index * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
-            className="flex-1 flex flex-col items-center gap-2"
-          >
+      <div className="relative h-56 flex flex-col justify-between">
+        {/* Grid Lines */}
+        <div className="absolute inset-0 flex flex-col justify-between pt-2 pb-6 pointer-events-none">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="w-full border-t border-dashed border-gray-100" />
+          ))}
+        </div>
+
+        <div className="flex items-end justify-between gap-4 h-48 relative z-10 px-2 lg:px-4">
+          {data.map((item, index) => (
             <motion.div
-              whileHover={{ scale: 1.1 }}
-              className="w-full bg-gradient-to-t from-travel-blue to-travel-blue/60 rounded-t-lg relative group cursor-pointer"
-              style={{ height: '100%' }}
+              key={item.month}
+              initial={{ height: 0 }}
+              animate={{ height: `${(item.amount / maxAmount) * 100}%` }}
+              transition={{ duration: 1, delay: 0.6 + index * 0.1, ease: [0.22, 1, 0.36, 1] as const }}
+              className="flex-1 flex flex-col items-center gap-3 group relative"
             >
-              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-travel-text text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                ${item.amount.toLocaleString()}
-              </div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className={`w-full max-w-[40px] rounded-t-lg relative cursor-pointer shadow-sm transition-all duration-300 group-hover:shadow-glow-blue ${index === 5 ? 'gradient-blue' : 'bg-gradient-to-t from-gray-100 to-gray-200 group-hover:from-travel-blue/40 group-hover:to-travel-blue/20'
+                  }`}
+                style={{ height: '100%' }}
+              >
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-travel-text text-white text-[10px] font-bold px-2 py-1 rounded shadow-xl opacity-0 group-hover:opacity-100 transition-all transform group-hover:-translate-y-1 pointer-events-none z-20">
+                  ${item.amount.toLocaleString()}
+                </div>
+                {index === 5 && (
+                  <div className="absolute inset-0 bg-white/20 animate-pulse rounded-t-lg" />
+                )}
+              </motion.div>
+              <span className={`text-xs font-bold transition-colors duration-300 ${index === 5 ? 'text-travel-blue' : 'text-travel-text-secondary group-hover:text-travel-text'
+                }`}>
+                {item.month}
+              </span>
             </motion.div>
-            <span className="text-xs text-travel-text-secondary font-medium">{item.month}</span>
-          </motion.div>
-        ))}
+          ))}
+        </div>
       </div>
     </motion.div>
   );
@@ -267,36 +285,43 @@ function SpendingChart() {
 function DestinationCard({ destination, index }: { destination: any; index: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
+      initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay: 0.5 + index * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
-      whileHover={{ y: -8, scale: 1.02 }}
-      className="relative rounded-2xl overflow-hidden cursor-pointer group"
+      whileHover={{ y: -6 }}
+      className="relative rounded-2xl overflow-hidden cursor-pointer group shadow-md hover:shadow-xl transition-all duration-500"
     >
-      <img 
-        src={destination.image} 
-        alt={destination.name}
-        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 p-4">
-        <h4 className="font-bold text-white text-lg">{destination.name}</h4>
-        <div className="flex items-center justify-between">
-          <span className="text-white/80 text-sm">{destination.trips} trips</span>
-          <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-            <span className="text-white text-sm">{destination.rating}</span>
-          </div>
+      <div className="aspect-[4/3] overflow-hidden">
+        <img
+          src={destination.image}
+          alt={destination.name}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-115"
+        />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+
+      <div className="absolute top-3 right-3">
+        <div className="glass-dark px-2 py-1 rounded-full flex items-center gap-1 backdrop-blur-md bg-black/30 border border-white/20">
+          <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+          <span className="text-white text-[10px] font-bold">{destination.rating}</span>
         </div>
       </div>
+
+      <div className="absolute bottom-0 left-0 right-0 p-4 transform transition-transform duration-300 group-hover:-translate-y-1">
+        <h4 className="font-bold text-white text-lg leading-tight mb-1 group-hover:text-travel-blue-dark transition-colors">{destination.name}</h4>
+        <div className="flex items-center gap-2">
+          <span className="text-white/70 text-xs font-medium">{destination.trips} popular trips</span>
+        </div>
+      </div>
+
       <motion.div
         initial={{ opacity: 0 }}
         whileHover={{ opacity: 1 }}
-        className="absolute inset-0 bg-travel-blue/20 flex items-center justify-center"
+        className="absolute inset-0 bg-travel-blue/10 flex items-center justify-center backdrop-blur-[2px]"
       >
-        <Button className="bg-white text-travel-blue rounded-full px-6">
-          Explore
-        </Button>
+        <div className="bg-white text-travel-blue rounded-full px-5 py-2 text-sm font-bold shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+          Explore Now
+        </div>
       </motion.div>
     </motion.div>
   );
@@ -345,71 +370,60 @@ export default function Dashboard({ onNavigate }: { onNavigate: (section: string
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-travel-bg pt-24 pb-12"
+      className="min-h-screen bg-travel-bg pt-28 pb-12"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        {/* Compact Header & Integrated Actions */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8"
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
+          className="bg-white rounded-xl p-3 shadow-sm border border-gray-100 mb-5"
         >
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-travel-text mb-1">
-              {greeting}, <span className="text-gradient">Admin</span> 👋
-            </h1>
-            <p className="text-travel-text-secondary">Here's what's happening with your travel today.</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative"
-            >
-              <Button variant="outline" className="rounded-full px-4 py-2 border-gray-200">
-                <Bell className="w-5 h-5 text-travel-text-secondary" />
-              </Button>
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="flex items-center gap-3 bg-white rounded-full px-4 py-2 shadow-card"
-            >
-              <div className="w-8 h-8 rounded-full gradient-blue flex items-center justify-center">
-                <span className="text-white text-sm font-bold">A</span>
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full gradient-blue flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-travel-blue/10">
+                <span className="text-white text-base font-bold">A</span>
               </div>
-              <span className="font-medium text-travel-text hidden sm:block">Admin User</span>
-            </motion.div>
-          </div>
-        </motion.div>
+              <div>
+                <h1 className="text-lg font-bold text-travel-text flex items-center gap-1.5 leading-none mb-1">
+                  {greeting}, <span className="text-travel-blue">Admin</span> 👋
+                </h1>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest flex items-center gap-1.5 opacity-60">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                  Travel Intelligence Active
+                </p>
+              </div>
+            </div>
 
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] as const }}
-          className="flex flex-wrap gap-3 mb-8"
-        >
-          {[
-            { label: 'Book Flight', icon: Plane, color: 'bg-travel-blue', section: 'flights' },
-            { label: 'Book Hotel', icon: Hotel, color: 'bg-travel-green', section: 'hotels' },
-            { label: 'Explore Packages', icon: Package, color: 'bg-travel-orange', section: 'packages' },
-          ].map((action, index) => (
-            <motion.button
-              key={action.label}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => onNavigate(action.section)}
-              className={`flex items-center gap-2 ${action.color} text-white px-6 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-shadow`}
-            >
-              <action.icon className="w-5 h-5" />
-              {action.label}
-            </motion.button>
-          ))}
+            <div className="flex flex-wrap items-center gap-2">
+              {[
+                { label: 'Flight', icon: Plane, color: 'bg-travel-blue', section: 'flights' },
+                { label: 'Hotel', icon: Hotel, color: 'bg-travel-green', section: 'hotels' },
+                { label: 'Package', icon: Package, color: 'bg-travel-orange', section: 'packages' },
+              ].map((action) => (
+                <motion.button
+                  key={action.label}
+                  whileHover={{ scale: 1.05, y: -1 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => onNavigate(action.section)}
+                  className={`flex items-center gap-1.5 ${action.color} text-white px-3 h-8 rounded-lg text-[10px] font-bold shadow-sm hover:shadow-md transition-all`}
+                >
+                  <action.icon className="w-3 h-3" />
+                  {action.label}
+                </motion.button>
+              ))}
+              <div className="w-px h-6 bg-gray-100 mx-1 hidden lg:block" />
+              <motion.div className="flex items-center gap-2">
+                <motion.div whileHover={{ scale: 1.1 }} className="relative cursor-pointer">
+                  <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-100">
+                    <Bell className="w-3.5 h-3.5 text-gray-400" />
+                  </div>
+                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center border-2 border-white shadow-sm">3</span>
+                </motion.div>
+              </motion.div>
+            </div>
+          </div>
         </motion.div>
 
         {/* Stats Grid */}
@@ -420,7 +434,7 @@ export default function Dashboard({ onNavigate }: { onNavigate: (section: string
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-8 mb-8">
           {/* Left Column - Chart & Destinations */}
           <div className="lg:col-span-2 space-y-8">
             {/* Spending Chart */}
@@ -446,14 +460,13 @@ export default function Dashboard({ onNavigate }: { onNavigate: (section: string
             </motion.div>
           </div>
 
-          {/* Right Column - Recent Bookings & AI Insights */}
+          {/* Right Column - Recent Bookings */}
           <div className="space-y-8">
-            {/* Recent Bookings */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
-              className="bg-white rounded-2xl p-6 shadow-card"
+              className="bg-white rounded-2xl p-6 shadow-card border border-gray-100"
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-travel-text text-lg">Recent Bookings</h3>
@@ -467,28 +480,32 @@ export default function Dashboard({ onNavigate }: { onNavigate: (section: string
                 View All Bookings
               </Button>
             </motion.div>
-
-            {/* AI Insights */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
-              className="bg-white rounded-2xl p-6 shadow-card"
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg gradient-ai flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-white" />
-                </div>
-                <h3 className="font-bold text-travel-text text-lg">AI Insights</h3>
-              </div>
-              <div className="space-y-3">
-                {aiInsights.map((insight, index) => (
-                  <AIInsight key={index} insight={insight} index={index} />
-                ))}
-              </div>
-            </motion.div>
           </div>
         </div>
+
+        {/* AI Insights - Full Width Bottom Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
+          className="bg-gradient-to-br from-travel-blue/5 via-travel-green/5 to-transparent rounded-3xl p-8 border border-travel-blue/10 relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-travel-blue/5 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="flex items-center gap-3 mb-8 relative z-10">
+            <div className="w-10 h-10 rounded-xl gradient-ai flex items-center justify-center shadow-lg">
+              <Sparkles className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-travel-text text-xl">AI Smart Insights</h3>
+              <p className="text-sm text-travel-text-secondary">Personalized recommendations based on your activity</p>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 relative z-10">
+            {aiInsights.map((insight, index) => (
+              <AIInsight key={index} insight={insight} index={index} />
+            ))}
+          </div>
+        </motion.div>
       </div>
     </motion.div>
   );

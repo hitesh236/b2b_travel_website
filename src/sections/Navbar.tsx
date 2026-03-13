@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Plane, LayoutDashboard, Hotel, Package } from 'lucide-react';
@@ -16,16 +16,7 @@ const navItems = [
 ];
 
 export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleNavClick = (sectionId: string) => {
     onNavigate(sectionId);
@@ -45,37 +36,33 @@ export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled || isDetailPage || currentSection !== 'dashboard'
-          ? 'glass shadow-lg py-3'
-          : 'bg-transparent py-5'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 glass shadow-lg py-3"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <motion.div 
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => handleNavClick('dashboard')}
-          >
+        <div className="flex items-center h-16">
+          {/* Left: Logo */}
+          <div className="flex-1 flex justify-start">
             <motion.div 
-              whileHover={{ rotate: 15 }}
-              transition={{ duration: 0.3 }}
-              className="w-10 h-10 rounded-xl gradient-blue flex items-center justify-center"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() => handleNavClick('dashboard')}
             >
-              <Plane className="w-5 h-5 text-white" />
+              <motion.div 
+                whileHover={{ rotate: 15 }}
+                transition={{ duration: 0.3 }}
+                className="w-10 h-10 rounded-xl gradient-blue flex items-center justify-center"
+              >
+                <Plane className="w-5 h-5 text-white" />
+              </motion.div>
+              <span className="text-xl font-bold transition-colors text-travel-text">
+                TravelAI<span className="text-travel-blue">Pro</span>
+              </span>
             </motion.div>
-            <span className={`text-xl font-bold transition-colors ${
-              isScrolled || isDetailPage || currentSection !== 'dashboard' ? 'text-travel-text' : 'text-white'
-            }`}>
-              TravelAI<span className="text-travel-blue">Pro</span>
-            </span>
-          </motion.div>
+          </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Center: Desktop Navigation */}
+          <div className="hidden md:flex items-center justify-center gap-2">
             {navItems.map((item, index) => {
               const Icon = item.icon;
               const isActive = effectiveSection === item.id;
@@ -90,9 +77,7 @@ export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
                   className={`relative flex items-center gap-2 px-4 py-2.5 rounded-full font-medium transition-all duration-300 ${
                     isActive
                       ? 'gradient-blue text-white shadow-lg'
-                      : isScrolled || isDetailPage || currentSection !== 'dashboard'
-                        ? 'text-travel-text hover:bg-gray-100'
-                        : 'text-white/90 hover:bg-white/10'
+                      : 'text-travel-text hover:bg-gray-100'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -109,52 +94,54 @@ export default function Navbar({ currentSection, onNavigate }: NavbarProps) {
             })}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button 
-                className="gradient-blue text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-glow transition-all duration-300"
-                onClick={() => handleNavClick('flights')}
+          {/* Right: CTA Button & Mobile Menu */}
+          <div className="flex-1 flex justify-end items-center gap-4">
+            <div className="hidden md:block">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Book Now
-              </Button>
-            </motion.div>
-          </div>
+                <Button 
+                  className="gradient-blue text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-glow transition-all duration-300"
+                  onClick={() => handleNavClick('flights')}
+                >
+                  Book Now
+                </Button>
+              </motion.div>
+            </div>
 
-          {/* Mobile Menu Button */}
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="md:hidden p-2"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <AnimatePresence mode="wait">
-              {isMobileMenuOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <X className={`w-6 h-6 ${isScrolled || isDetailPage || currentSection !== 'dashboard' ? 'text-travel-text' : 'text-white'}`} />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu className={`w-6 h-6 ${isScrolled || isDetailPage || currentSection !== 'dashboard' ? 'text-travel-text' : 'text-white'}`} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
+            {/* Mobile Menu Button */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="md:hidden p-2"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <AnimatePresence mode="wait">
+                {isMobileMenuOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="w-6 h-6 text-travel-text" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-6 h-6 text-travel-text" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
