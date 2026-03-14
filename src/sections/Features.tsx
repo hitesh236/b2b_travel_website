@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { 
-  Sparkles, 
-  Wallet, 
-  Headphones, 
-  Shield, 
+import { motion } from 'framer-motion';
+import {
+  Sparkles,
+  Wallet,
+  Headphones,
+  Shield,
   TrendingUp,
   Bell,
   FileText,
@@ -18,6 +19,20 @@ const iconMap: Record<string, React.ElementType> = {
   shield: Shield,
 };
 
+const colorMap = [
+  { iconBg: 'bg-travel-blue/10', iconColor: 'text-travel-blue', accent: 'border-travel-blue/20' },
+  { iconBg: 'bg-travel-green/10', iconColor: 'text-travel-green', accent: 'border-travel-green/20' },
+  { iconBg: 'bg-travel-orange/10', iconColor: 'text-travel-orange', accent: 'border-travel-orange/20' },
+  { iconBg: 'bg-purple-100', iconColor: 'text-purple-600', accent: 'border-purple-200' },
+];
+
+const additionalFeatures = [
+  { icon: TrendingUp, title: 'Price Prediction', description: '95% accuracy in price forecasting' },
+  { icon: Bell, title: 'Smart Alerts', description: 'Instant deal notifications' },
+  { icon: FileText, title: 'Auto Reports', description: 'One-click expense reports' },
+  { icon: BarChart3, title: 'Analytics', description: 'Visual travel spending insights' },
+];
+
 export default function Features() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -25,155 +40,105 @@ export default function Features() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
+        if (entry.isIntersecting) { setIsVisible(true); observer.disconnect(); }
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
+    if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
-  const additionalFeatures = [
-    {
-      icon: TrendingUp,
-      title: 'Price Prediction',
-      description: 'Our AI predicts price trends with 95% accuracy, helping you book at the optimal time.',
-    },
-    {
-      icon: Bell,
-      title: 'Smart Alerts',
-      description: 'Get notified instantly when prices drop or better deals become available.',
-    },
-    {
-      icon: FileText,
-      title: 'Auto Reports',
-      description: 'Generate comprehensive travel expense reports with one click.',
-    },
-    {
-      icon: BarChart3,
-      title: 'Analytics Dashboard',
-      description: 'Track travel spending patterns and identify cost-saving opportunities.',
-    },
-  ];
-
   return (
-    <section id="features" ref={sectionRef} className="py-20 bg-travel-bg">
+    <section id="features" ref={sectionRef} className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div 
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-travel-blue/10 mb-6 ${
-              isVisible ? 'animate-slide-down' : 'opacity-0'
-            }`}
-          >
+        <div className={`text-center mb-16 ${isVisible ? 'animate-slide-up' : 'opacity-0'}`}>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-travel-blue/10 mb-5">
             <Sparkles className="w-4 h-4 text-travel-blue" />
-            <span className="text-sm font-medium text-travel-blue">Why Choose Us</span>
+            <span className="text-sm font-semibold text-travel-blue">Why Choose Us</span>
           </div>
-          
-          <h2 
-            className={`text-3xl md:text-4xl font-bold text-travel-text mb-4 ${
-              isVisible ? 'animate-slide-up' : 'opacity-0'
-            }`}
-            style={{ animationDelay: '0.1s' }}
-          >
-            Why Choose TravelAI Pro
+          <h2 className="text-3xl md:text-4xl font-bold text-travel-text mb-3">
+            Everything You Need to Travel Smarter
           </h2>
-          
-          <p 
-            className={`text-lg text-travel-text-secondary max-w-2xl mx-auto ${
-              isVisible ? 'animate-slide-up' : 'opacity-0'
-            }`}
-            style={{ animationDelay: '0.2s' }}
-          >
-            Experience the future of corporate travel with our AI-powered platform designed for modern businesses.
+          <p className="text-travel-text-secondary max-w-2xl mx-auto">
+            Built for modern businesses — powerful AI, real savings, and zero hassle.
           </p>
         </div>
 
-        {/* Main Features Grid */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        {/* Main Features — horizontal card layout */}
+        <div className="grid md:grid-cols-2 gap-5 mb-12">
           {features.map((feature, index) => {
             const Icon = iconMap[feature.icon] || Sparkles;
+            const color = colorMap[index % colorMap.length];
             return (
-              <div 
+              <motion.div
                 key={feature.id}
-                className={`bg-white rounded-2xl p-8 shadow-card hover:shadow-card-hover transition-all duration-300 group cursor-pointer border border-transparent hover:border-travel-blue/20 ${
-                  isVisible ? 'animate-scale-in' : 'opacity-0'
-                }`}
-                style={{ animationDelay: `${0.3 + index * 0.1}s` }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.1 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className={`flex items-start gap-5 p-6 rounded-2xl border bg-white hover:shadow-lg hover:${color.accent} transition-all duration-300 group cursor-pointer border-gray-100`}
               >
-                <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-travel-blue/10 to-travel-green/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                    <Icon className="w-7 h-7 text-travel-blue" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-travel-text mb-2 group-hover:text-travel-blue transition-colors">
-                      {feature.title}
-                    </h3>
-                    <p className="text-travel-text-secondary leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
+                <div className={`w-12 h-12 rounded-xl ${color.iconBg} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon className={`w-6 h-6 ${color.iconColor}`} />
                 </div>
-              </div>
+                <div>
+                  <h3 className={`font-bold text-travel-text mb-1 group-hover:${color.iconColor} transition-colors text-lg`}>
+                    {feature.title}
+                  </h3>
+                  <p className="text-travel-text-secondary text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              </motion.div>
             );
           })}
         </div>
 
-        {/* Additional Features */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Additional Features — compact pill grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16">
           {additionalFeatures.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div 
+              <motion.div
                 key={index}
-                className={`bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 group cursor-pointer ${
-                  isVisible ? 'animate-slide-up' : 'opacity-0'
-                }`}
-                style={{ animationDelay: `${0.6 + index * 0.1}s` }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={isVisible ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.4, delay: 0.4 + index * 0.07 }}
+                className="flex flex-col items-center text-center p-5 rounded-2xl bg-[#f8f9fb] border border-gray-100 hover:bg-white hover:shadow-md hover:border-travel-blue/20 transition-all duration-300 group cursor-pointer"
               >
-                <div className="w-12 h-12 rounded-xl bg-travel-blue/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <Icon className="w-6 h-6 text-travel-blue" />
+                <div className="w-10 h-10 rounded-xl bg-travel-blue/10 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-travel-blue/20 transition-all duration-300">
+                  <Icon className="w-5 h-5 text-travel-blue" />
                 </div>
-                <h4 className="font-bold text-travel-text mb-2 group-hover:text-travel-blue transition-colors">
-                  {feature.title}
-                </h4>
-                <p className="text-sm text-travel-text-secondary">
-                  {feature.description}
-                </p>
-              </div>
+                <h4 className="font-bold text-travel-text text-sm mb-1">{feature.title}</h4>
+                <p className="text-xs text-travel-text-secondary leading-tight">{feature.description}</p>
+              </motion.div>
             );
           })}
         </div>
 
-        {/* AI Stats Banner */}
-        <div 
-          className={`mt-16 gradient-blue rounded-2xl p-8 md:p-12 text-white ${
-            isVisible ? 'animate-scale-in' : 'opacity-0'
-          }`}
-          style={{ animationDelay: '0.9s' }}
+        {/* AI Stats Banner — compact 3-stat row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="gradient-blue rounded-2xl p-8 text-white"
         >
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div>
-              <p className="text-4xl md:text-5xl font-bold mb-2">95%</p>
-              <p className="text-white/80">Price Prediction Accuracy</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold mb-2">40%</p>
-              <p className="text-white/80">Average Cost Savings</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold mb-2">3x</p>
-              <p className="text-white/80">Faster Booking Process</p>
-            </div>
+          <div className="grid grid-cols-3 gap-4 text-center">
+            {[
+              { value: '95%', label: 'Price Prediction Accuracy' },
+              { value: '40%', label: 'Average Cost Savings' },
+              { value: '3×', label: 'Faster Booking Process' },
+            ].map((stat, i) => (
+              <div key={i}>
+                <p className="text-3xl md:text-4xl font-bold mb-1">{stat.value}</p>
+                <div className="w-8 h-0.5 bg-white/30 mx-auto mb-2" />
+                <p className="text-white/80 text-sm">{stat.label}</p>
+              </div>
+            ))}
           </div>
-        </div>
+        </motion.div>
+
       </div>
     </section>
   );
