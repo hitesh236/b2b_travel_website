@@ -1,10 +1,10 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Plane, 
-  Search, 
-  Filter, 
+import {
+  Plane,
+  Search,
+  Filter,
   ArrowRightLeft,
   Star,
   Check,
@@ -66,13 +66,13 @@ const itemVariants = {
 
 
 
-function FlightCard({ 
-  flight, 
-  onViewDetail, 
-  currentFrom, 
-  currentTo 
-}: { 
-  flight: typeof flights[0]; 
+function FlightCard({
+  flight,
+  onViewDetail,
+  currentFrom,
+  currentTo
+}: {
+  flight: typeof flights[0];
   onViewDetail: (id: string) => void;
   currentFrom: typeof CITIES[0];
   currentTo: typeof CITIES[0];
@@ -170,7 +170,7 @@ function FlightCard({
               ))}
             </div>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <div className="text-right">
               <div className="flex items-baseline gap-1">
@@ -179,7 +179,7 @@ function FlightCard({
               </div>
               <p className="text-[8px] text-gray-400 font-medium tracking-wide">Incl. taxes/fees</p>
             </div>
-            <Button 
+            <Button
               onClick={() => onViewDetail(flight.id)}
               className="gradient-blue text-white h-8 px-5 rounded-lg text-xs font-bold hover:shadow-glow transition-all"
             >
@@ -206,8 +206,9 @@ export default function FlightsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState('recommended');
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [isEditingSearch, setIsEditingSearch] = useState(false);
-  
+
   // Initialize with search state if available
   const [tripType, setTripType] = useState<'oneWay' | 'roundTrip' | 'multiCity'>(searchState?.tripType || 'oneWay');
   const [fromCity, setFromCity] = useState(searchState?.fromCity || CITIES[0]);
@@ -216,7 +217,7 @@ export default function FlightsPage() {
   const [children, setChildren] = useState(searchState?.children || 0);
   const [infants, setInfants] = useState(searchState?.infants || 0);
   const [cabinClass, setCabinClass] = useState(searchState?.cabinClass || 'Economy');
-  
+
   const [showFromDropdown, setShowFromDropdown] = useState(false);
   const [showToDropdown, setShowToDropdown] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
@@ -245,9 +246,9 @@ export default function FlightsPage() {
 
   const updateMultiCityFlight = (index: number, type: 'from' | 'to', city: typeof CITIES[0]) => {
     const newFlights = [...multiCityFlights];
-    newFlights[index] = { 
-      ...newFlights[index], 
-      [type]: `${city.name} (${city.code})` 
+    newFlights[index] = {
+      ...newFlights[index],
+      [type]: `${city.name} (${city.code})`
     };
     setMultiCityFlights(newFlights);
     setActiveMultiCityDropdown(null);
@@ -272,7 +273,7 @@ export default function FlightsPage() {
   });
 
   const toggleFilter = (filter: string) => {
-    setActiveFilters(prev => 
+    setActiveFilters(prev =>
       prev.includes(filter) ? prev.filter(f => f !== filter) : [...prev, filter]
     );
   };
@@ -287,172 +288,132 @@ export default function FlightsPage() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hyper-Compact Premium Search Header */}
-        <motion.div 
-          variants={itemVariants}
-          className="bg-gradient-to-br from-[#06162a] via-[#0a223d] to-[#06162a] rounded-[24px] p-5 mb-5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden border border-white/5"
-        >
-          {/* Subtle Glow Effects */}
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-travel-blue/10 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none" />
-          
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 px-2">
-            <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
-              {/* Trip Type Info */}
-              <div className="flex flex-col">
-                <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-1 font-montserrat">Type</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-travel-orange animate-pulse" />
-                  <span className="text-xs font-black text-white uppercase font-montserrat">
-                    {tripType === 'oneWay' ? 'One Way' : tripType === 'roundTrip' ? 'Round Trip' : 'Multi City'}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="hidden lg:block w-px h-8 bg-white/10" />
 
-              <div className="flex items-center gap-6">
-                {tripType === 'multiCity' ? (
-                  <div className="flex flex-col">
-                    <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-1.5 font-montserrat text-left">Full Route</span>
-                    <div className="flex items-center gap-3">
-                      {multiCityFlights.map((flight: any, index: number) => (
-                        <div key={flight.id} className="flex items-center gap-3">
-                          <div className="flex flex-col">
-                            <span className="text-2xl font-black text-white font-montserrat leading-none uppercase">{getCityCode(flight.from)}</span>
-                            <span className="text-[8px] font-bold text-white/40 uppercase font-montserrat truncate max-w-[40px]">{flight.from.split(' (')[0]}</span>
-                          </div>
-                          <ArrowRightLeft className="w-3 h-3 text-travel-blue opacity-50" />
-                          {index === multiCityFlights.length - 1 && (
-                            <div className="flex flex-col">
-                              <span className="text-2xl font-black text-white font-montserrat leading-none uppercase">{getCityCode(flight.to)}</span>
-                              <span className="text-[8px] font-bold text-white/40 uppercase font-montserrat truncate max-w-[40px]">{flight.to.split(' (')[0]}</span>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-1 font-montserrat font-left">From</span>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-black text-white font-montserrat leading-none uppercase">{fromCity.code}</span>
-                        <span className="text-[10px] font-bold text-white/50 uppercase font-montserrat hidden sm:block">{fromCity.name}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-                      {tripType === 'roundTrip' ? (
-                        <ArrowRightLeft className="w-3.5 h-3.5 text-travel-blue" />
-                      ) : (
-                        <ArrowRightLeft className="w-3.5 h-3.5 text-travel-blue" />
-                      )}
-                    </div>
-
-                    <div className="flex flex-col">
-                      <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-1 font-montserrat font-left">To</span>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-black text-white font-montserrat leading-none uppercase">{toCity.code}</span>
-                        <span className="text-[10px] font-bold text-white/50 uppercase font-montserrat hidden sm:block">{toCity.name}</span>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className="hidden lg:block w-px h-8 bg-white/10" />
-
-              {/* Date & Travelers - Tight */}
-              <div className="flex gap-10">
-                <div className="flex flex-col">
-                  <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-1 font-montserrat">Departure</span>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-black text-white font-montserrat leading-none">15</span>
-                    <span className="text-[10px] font-bold text-white/50 uppercase font-montserrat">Mar' 24</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col">
-                  <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mb-1 font-montserrat">Group</span>
-                  <span className="text-xs font-black text-white uppercase font-montserrat leading-none mt-1">
-                    {(adults + children + infants).toString().padStart(2, '0')} {(adults + children + infants) > 1 ? 'Travelers' : 'Adult'}, {cabinClass}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <Button 
-              onClick={() => setIsEditingSearch(true)}
-              className="bg-travel-blue hover:bg-white hover:text-travel-blue text-white rounded-xl px-8 py-5 h-11 font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-travel-blue/20"
-            >
-              Modify
-            </Button>
-          </div>
-        </motion.div>
 
         {/* Hyper-Compact Glassmorphism Filters */}
-        <motion.div 
-          variants={itemVariants} 
-          className="bg-white/80 backdrop-blur-md rounded-[20px] shadow-sm border border-white p-2 mb-6 flex flex-wrap items-center justify-between gap-4 px-6 relative z-20"
+        <motion.div
+          variants={itemVariants}
+          className="bg-white/70 backdrop-blur-xl rounded-[24px] shadow-[0_8px_32px_0_rgba(31,41,55,0.05)] border border-white/50 p-2 mb-8 flex flex-wrap items-center justify-between gap-4 px-8 relative z-20"
         >
           <div className="flex items-center gap-8">
-            <div className="flex items-center gap-2">
-              <Filter className="w-3.5 h-3.5 text-travel-blue" />
-              <h2 className="text-[9px] font-black text-travel-text uppercase tracking-widest font-montserrat">Filters</h2>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-travel-blue/10 flex items-center justify-center">
+                <Filter className="w-3.5 h-3.5 text-travel-blue" />
+              </div>
+              <div className="flex flex-col">
+                <h2 className="text-[9px] font-black text-travel-text uppercase tracking-widest font-montserrat">Filters</h2>
+                {(activeFilters.length > 0 || searchQuery) && (
+                  <button 
+                    onClick={() => { setActiveFilters([]); setSearchQuery(''); }}
+                    className="text-[8px] font-bold text-red-500 hover:text-red-600 uppercase tracking-widest transition-colors text-left"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
             </div>
-            
+
             <div className="flex items-center gap-2">
-              {['Non Stop', 'Refundable', 'Air India'].map(label => (
-                <button 
-                  key={label} 
+              {[
+                { label: 'Non Stop', icon: Zap },
+                { label: 'Refundable', icon: ShieldCheck },
+                { label: 'Air India', icon: Plane }
+              ].map(({ label, icon: Icon }) => (
+                <button
+                  key={label}
                   onClick={() => toggleFilter(label)}
-                  className={`px-4 py-1.5 text-[8px] font-black uppercase tracking-widest rounded-lg border transition-all ${
-                    activeFilters.includes(label)
+                  className={`px-4 py-2 text-[8px] font-black uppercase tracking-widest rounded-xl border transition-all flex items-center gap-2 ${activeFilters.includes(label)
                       ? 'bg-travel-blue text-white border-travel-blue shadow-lg shadow-travel-blue/20'
-                      : 'bg-gray-50/50 text-gray-500 border-transparent hover:border-travel-blue hover:bg-white hover:text-travel-blue'
-                  }`}
+                      : 'bg-gray-50/50 text-gray-500 border-gray-100 hover:border-travel-blue hover:bg-white hover:text-travel-blue'
+                    }`}
                 >
+                  <Icon className={`w-3 h-3 ${activeFilters.includes(label) ? 'text-white' : 'text-travel-blue'}`} />
                   {label}
                 </button>
               ))}
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowFilters(!showFilters)}
-                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${showFilters ? 'bg-travel-text text-white shadow-lg' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${showFilters ? 'bg-travel-text text-white shadow-lg' : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-100'}`}
               >
-                <Plus className={`w-3 h-3 transition-transform duration-300 ${showFilters ? 'rotate-45' : ''}`} />
+                <Plus className={`w-4 h-4 transition-transform duration-300 ${showFilters ? 'rotate-45' : ''}`} />
               </motion.button>
             </div>
           </div>
 
           <div className="flex items-center gap-6">
             <div className="relative group/search">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400" />
-              <input 
-                placeholder="Search..."
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 group-hover/search:text-travel-blue transition-colors" />
+              <input
+                placeholder="SEARCH FLIGHTS..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-4 h-9 rounded-lg bg-gray-50/50 border border-transparent focus:border-travel-blue/20 focus:ring-4 focus:ring-travel-blue/5 transition-all text-[10px] font-black tracking-widest text-travel-text outline-none w-48 shadow-inner"
+                className="pl-10 pr-4 h-10 rounded-xl bg-gray-50/50 border border-gray-100 focus:bg-white focus:border-travel-blue/30 focus:ring-8 focus:ring-travel-blue/5 transition-all text-[10px] font-black tracking-[0.1em] text-travel-text outline-none w-48 focus:w-64 shadow-inner placeholder:text-gray-300"
               />
             </div>
-            
+
             <div className="h-6 w-px bg-gray-100" />
 
             <div className="flex items-center gap-3">
               <span className="text-[9px] font-black text-gray-300 uppercase tracking-widest font-montserrat">Sort</span>
-              <div className="relative group/sort">
-                <select 
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="text-[9px] font-black text-travel-text outline-none cursor-pointer bg-transparent uppercase tracking-wider pr-6 appearance-none font-montserrat"
+              <div className="relative">
+                <button 
+                  onClick={() => setShowSortDropdown(!showSortDropdown)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-50/50 border border-transparent hover:border-travel-blue/20 hover:bg-white transition-all group/sort min-w-[140px] justify-between"
                 >
-                  <option value="recommended">Recommended</option>
-                  <option value="price-low">Lowest Price</option>
-                  <option value="price-high">Highest Price</option>
-                  <option value="duration">Fastest First</option>
-                </select>
-                <ChevronDown className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 pointer-events-none transition-transform group-hover/sort:translate-y-[-40%]" />
+                  <span className="text-[9px] font-black text-travel-text uppercase tracking-widest font-montserrat">
+                    {['recommended', 'price-low', 'price-high', 'duration'].find(v => v === sortBy) === 'recommended' && "Recommended"}
+                    {sortBy === 'price-low' && "Lowest Price"}
+                    {sortBy === 'price-high' && "Highest Price"}
+                    {sortBy === 'duration' && "Fastest First"}
+                  </span>
+                  <ChevronDown className={`w-3 h-3 text-gray-400 transition-transform duration-300 ${showSortDropdown ? 'rotate-180' : ''}`} />
+                </button>
+
+                <AnimatePresence>
+                  {showSortDropdown && (
+                    <>
+                      <div className="fixed inset-0 z-30" onClick={() => setShowSortDropdown(false)} />
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] border border-gray-100 p-2 z-40 overflow-hidden"
+                      >
+                        {[
+                          { value: 'recommended', label: 'Recommended', icon: Award, color: 'text-travel-orange' },
+                          { value: 'price-low', label: 'Lowest Price', icon: TrendingDown, color: 'text-green-500' },
+                          { value: 'price-high', label: 'Highest Price', icon: Zap, color: 'text-travel-blue' },
+                          { value: 'duration', label: 'Fastest First', icon: Clock, color: 'text-purple-500' },
+                        ].map((option) => (
+                          <button
+                            key={option.value}
+                            onClick={() => {
+                              setSortBy(option.value);
+                              setShowSortDropdown(false);
+                            }}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-left group/item ${
+                              sortBy === option.value 
+                                ? 'bg-travel-blue/5 text-travel-blue' 
+                                : 'text-gray-500 hover:bg-gray-50 hover:text-travel-text'
+                            }`}
+                          >
+                            <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-colors ${
+                              sortBy === option.value ? 'bg-travel-blue/10' : 'bg-gray-50 group-hover/item:bg-white'
+                            }`}>
+                              <option.icon className={`w-3 h-3 ${sortBy === option.value ? 'text-travel-blue' : option.color}`} />
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-widest">{option.label}</span>
+                            {sortBy === option.value && (
+                              <div className="ml-auto w-1 h-1 rounded-full bg-travel-blue" />
+                            )}
+                          </button>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
@@ -466,8 +427,8 @@ export default function FlightsPage() {
             </p>
             <div className="w-1.5 h-1.5 rounded-full bg-travel-blue animate-pulse" />
           </div>
-          
-          <div 
+
+          <div
             onClick={() => setShowFareRules(true)}
             className="flex items-center gap-2 text-[10px] font-black text-travel-blue hover:text-travel-blue-dark cursor-pointer group uppercase tracking-widest"
           >
@@ -489,10 +450,10 @@ export default function FlightsPage() {
                   <div className="w-1 h-1 rounded-full bg-travel-blue opacity-30" />
                   <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-montserrat">{leg.from || 'Select'} → {leg.to || 'Select'}</span>
                 </div>
-                
+
                 <div className="space-y-4">
                   {(filteredFlights.length > 0 ? filteredFlights : flights.slice(0, 3)).slice(0, 2).map((flight: any) => (
-                    <FlightCard 
+                    <FlightCard
                       key={`${leg.id}-${flight.id}`}
                       flight={flight}
                       onViewDetail={(id) => navigate(`/flight/${id}`)}
@@ -505,63 +466,63 @@ export default function FlightsPage() {
             ))
           ) : tripType === 'roundTrip' ? (
             <div className="space-y-12">
-               {/* Outbound */}
-               <div className="space-y-4">
-                 <div className="flex items-center gap-3 px-4 py-2 bg-blue-50/50 rounded-xl w-fit border border-blue-100/50">
-                   <div className="w-6 h-6 rounded-lg gradient-blue flex items-center justify-center text-white shadow-sm">
-                     <Plane className="w-3 h-3" />
-                   </div>
-                   <span className="text-[10px] font-black text-travel-blue uppercase tracking-widest">Outbound Journey</span>
-                   <div className="w-1 h-1 rounded-full bg-travel-blue opacity-30" />
-                   <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-montserrat">{fromCity.name} to {toCity.name}</span>
-                 </div>
-                 {filteredFlights.length > 0 ? (
-                   filteredFlights.slice(0, 3).map((flight: any) => (
-                     <FlightCard 
-                       key={`out-${flight.id}`} 
-                       flight={flight} 
-                       onViewDetail={(id) => navigate(`/flight/${id}`)} 
-                       currentFrom={fromCity}
-                       currentTo={toCity}
-                     />
-                   ))
-                 ) : (
-                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4">No outbound flights found</p>
-                 )}
-               </div>
+              {/* Outbound */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 px-4 py-2 bg-blue-50/50 rounded-xl w-fit border border-blue-100/50">
+                  <div className="w-6 h-6 rounded-lg gradient-blue flex items-center justify-center text-white shadow-sm">
+                    <Plane className="w-3 h-3" />
+                  </div>
+                  <span className="text-[10px] font-black text-travel-blue uppercase tracking-widest">Outbound Journey</span>
+                  <div className="w-1 h-1 rounded-full bg-travel-blue opacity-30" />
+                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-montserrat">{fromCity.name} to {toCity.name}</span>
+                </div>
+                {filteredFlights.length > 0 ? (
+                  filteredFlights.slice(0, 3).map((flight: any) => (
+                    <FlightCard
+                      key={`out-${flight.id}`}
+                      flight={flight}
+                      onViewDetail={(id) => navigate(`/flight/${id}`)}
+                      currentFrom={fromCity}
+                      currentTo={toCity}
+                    />
+                  ))
+                ) : (
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4">No outbound flights found</p>
+                )}
+              </div>
 
-               {/* Return */}
-               <div className="space-y-4">
-                 <div className="flex items-center gap-3 px-4 py-2 bg-orange-50/50 rounded-xl w-fit border border-orange-100/50">
-                    <div className="w-6 h-6 rounded-lg bg-travel-orange flex items-center justify-center text-white shadow-sm">
-                     <Plane className="w-3 h-3 rotate-180" />
-                   </div>
-                   <span className="text-[10px] font-black text-travel-orange uppercase tracking-widest">Return Journey</span>
-                   <div className="w-1 h-1 rounded-full bg-travel-orange opacity-30" />
-                   <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-montserrat">{toCity.name} to {fromCity.name}</span>
-                 </div>
-                 {filteredFlights.length > 0 ? (
-                   filteredFlights.slice(0, 3).map((flight: any) => (
-                     <FlightCard 
-                       key={`ret-${flight.id}`} 
-                       flight={{...flight, id: `ret-${flight.id}`}} 
-                       onViewDetail={(id) => navigate(`/flight/${id}`)} 
-                       currentFrom={toCity}
-                       currentTo={fromCity}
-                     />
-                   ))
-                 ) : (
-                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4">No return flights found</p>
-                 )}
-               </div>
+              {/* Return */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 px-4 py-2 bg-orange-50/50 rounded-xl w-fit border border-orange-100/50">
+                  <div className="w-6 h-6 rounded-lg bg-travel-orange flex items-center justify-center text-white shadow-sm">
+                    <Plane className="w-3 h-3 rotate-180" />
+                  </div>
+                  <span className="text-[10px] font-black text-travel-orange uppercase tracking-widest">Return Journey</span>
+                  <div className="w-1 h-1 rounded-full bg-travel-orange opacity-30" />
+                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-montserrat">{toCity.name} to {fromCity.name}</span>
+                </div>
+                {filteredFlights.length > 0 ? (
+                  filteredFlights.slice(0, 3).map((flight: any) => (
+                    <FlightCard
+                      key={`ret-${flight.id}`}
+                      flight={{ ...flight, id: `ret-${flight.id}` }}
+                      onViewDetail={(id) => navigate(`/flight/${id}`)}
+                      currentFrom={toCity}
+                      currentTo={fromCity}
+                    />
+                  ))
+                ) : (
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4">No return flights found</p>
+                )}
+              </div>
             </div>
           ) : (
             filteredFlights.length > 0 ? (
               filteredFlights.map((flight: any) => (
-                <FlightCard 
-                  key={flight.id} 
-                  flight={flight} 
-                  onViewDetail={(id) => navigate(`/flight/${id}`)} 
+                <FlightCard
+                  key={flight.id}
+                  flight={flight}
+                  onViewDetail={(id) => navigate(`/flight/${id}`)}
                   currentFrom={fromCity}
                   currentTo={toCity}
                 />
@@ -573,7 +534,7 @@ export default function FlightsPage() {
                 </div>
                 <h3 className="text-2xl font-black text-travel-text mb-3 uppercase tracking-tight">No Matching Flights</h3>
                 <p className="text-gray-400 text-sm font-bold uppercase tracking-[0.2em] max-w-sm mx-auto leading-relaxed">We couldn't find any flights matching your criteria. Try adjusting filters or search with different dates.</p>
-                <Button 
+                <Button
                   variant="outline"
                   className="mt-10 rounded-2xl px-10 py-6 font-black text-xs uppercase tracking-widest border-2"
                   onClick={() => setSearchQuery('')}
@@ -603,15 +564,15 @@ export default function FlightsPage() {
       <AnimatePresence>
         {isEditingSearch && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-8">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-[#0a223d]/90 backdrop-blur-xl"
               onClick={() => setIsEditingSearch(false)}
             />
-            
-            <motion.div 
+
+            <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 30 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 30 }}
@@ -633,7 +594,7 @@ export default function FlightsPage() {
                       </div>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setIsEditingSearch(false)}
                     className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all group"
                   >
@@ -648,14 +609,13 @@ export default function FlightsPage() {
                     { id: 'roundTrip', label: 'Round Trip' },
                     { id: 'multiCity', label: 'Multi City' },
                   ].map((type) => (
-                    <button 
-                      key={type.id} 
+                    <button
+                      key={type.id}
                       onClick={() => setTripType(type.id as any)}
-                      className={`px-6 py-2.5 rounded-[14px] text-[10px] font-black uppercase tracking-widest transition-all ${
-                        tripType === type.id 
-                          ? 'bg-white text-travel-blue shadow-sm' 
+                      className={`px-6 py-2.5 rounded-[14px] text-[10px] font-black uppercase tracking-widest transition-all ${tripType === type.id
+                          ? 'bg-white text-travel-blue shadow-sm'
                           : 'text-gray-400 hover:text-travel-text'
-                      }`}
+                        }`}
                     >
                       {type.label}
                     </button>
@@ -669,7 +629,7 @@ export default function FlightsPage() {
                   <div className="space-y-4 mb-8">
                     {multiCityFlights.map((flight: any, index: number) => (
                       <div key={flight.id} className="grid grid-cols-1 md:grid-cols-12 gap-0 border-[1.5px] border-gray-100 rounded-[20px] shadow-sm relative group/row animate-in slide-in-from-left-2 transition-all bg-white mb-4 last:mb-0">
-                        <div 
+                        <div
                           className="md:col-span-4 p-4 border-b md:border-b-0 md:border-r-[1.5px] border-gray-100 hover:bg-blue-50/20 transition-all cursor-pointer relative"
                           onClick={() => setActiveMultiCityDropdown({ index, type: 'from' })}
                         >
@@ -682,7 +642,7 @@ export default function FlightsPage() {
                             {activeMultiCityDropdown?.index === index && activeMultiCityDropdown?.type === 'from' && (
                               <>
                                 <div className="fixed inset-0 z-[110]" onClick={(e) => { e.stopPropagation(); setActiveMultiCityDropdown(null); }} />
-                                <motion.div 
+                                <motion.div
                                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                   animate={{ opacity: 1, y: 0, scale: 1 }}
                                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -713,7 +673,7 @@ export default function FlightsPage() {
                           </AnimatePresence>
                         </div>
 
-                        <div 
+                        <div
                           className="md:col-span-4 p-4 border-b md:border-b-0 md:border-r-[1.5px] border-gray-100 hover:bg-blue-50/20 transition-all cursor-pointer relative"
                           onClick={() => setActiveMultiCityDropdown({ index, type: 'to' })}
                         >
@@ -726,7 +686,7 @@ export default function FlightsPage() {
                             {activeMultiCityDropdown?.index === index && activeMultiCityDropdown?.type === 'to' && (
                               <>
                                 <div className="fixed inset-0 z-[110]" onClick={(e) => { e.stopPropagation(); setActiveMultiCityDropdown(null); }} />
-                                <motion.div 
+                                <motion.div
                                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                   animate={{ opacity: 1, y: 0, scale: 1 }}
                                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -763,7 +723,7 @@ export default function FlightsPage() {
                         </div>
                         <div className="md:col-span-1 flex items-center justify-center p-2 bg-gray-50/30">
                           {multiCityFlights.length > 2 && (
-                            <button 
+                            <button
                               onClick={() => removeMultiCityFlight(flight.id)}
                               className="w-8 h-8 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
                             >
@@ -773,9 +733,9 @@ export default function FlightsPage() {
                         </div>
                       </div>
                     ))}
-                    
+
                     <div className="flex flex-wrap justify-between items-center gap-4 mt-6">
-                      <button 
+                      <button
                         onClick={addMultiCityFlight}
                         disabled={multiCityFlights.length >= 5}
                         className="flex items-center gap-2 px-6 py-3 rounded-[16px] text-travel-blue font-black text-[10px] uppercase tracking-[0.15em] bg-blue-50/50 hover:bg-travel-blue hover:text-white transition-all duration-300 disabled:opacity-50 font-montserrat"
@@ -783,8 +743,8 @@ export default function FlightsPage() {
                         <Plus className="w-4 h-4" />
                         Add Flight
                       </button>
-                      
-                      <div 
+
+                      <div
                         className="p-4 border-[1.5px] border-dashed border-gray-100 rounded-[18px] flex flex-col min-w-[220px] hover:bg-blue-50/20 transition-all cursor-pointer bg-white group/trav relative"
                         onClick={() => setShowTravelerDropdown(!showTravelerDropdown)}
                       >
@@ -816,18 +776,17 @@ export default function FlightsPage() {
                                         <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{item.sub}</span>
                                       </div>
                                       <div className="flex items-center gap-4">
-                                        <button 
+                                        <button
                                           onClick={() => item.setState(Math.max(item.min, item.state - 1))}
-                                          className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
-                                            item.state > item.min 
-                                              ? 'border-travel-blue/20 text-travel-blue hover:bg-travel-blue hover:text-white hover:border-travel-blue' 
+                                          className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${item.state > item.min
+                                              ? 'border-travel-blue/20 text-travel-blue hover:bg-travel-blue hover:text-white hover:border-travel-blue'
                                               : 'border-gray-50 text-gray-200 cursor-not-allowed'
-                                          }`}
+                                            }`}
                                         >
                                           <Minus className="w-3 h-3" />
                                         </button>
                                         <span className="text-sm font-black text-travel-text w-4 text-center font-montserrat">{item.state}</span>
-                                        <button 
+                                        <button
                                           onClick={() => item.setState(Math.min(9, item.state + 1))}
                                           className="w-8 h-8 rounded-full border border-travel-blue/20 flex items-center justify-center text-travel-blue hover:bg-travel-blue hover:text-white hover:border-travel-blue transition-all"
                                         >
@@ -841,14 +800,13 @@ export default function FlightsPage() {
                                     <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-4 underline decoration-travel-blue/30 underline-offset-4 font-montserrat">Cabin Class</span>
                                     <div className="flex flex-wrap gap-2">
                                       {['Economy', 'Premium', 'Business'].map((cls) => (
-                                        <button 
+                                        <button
                                           key={cls}
                                           onClick={() => setCabinClass(cls)}
-                                          className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
-                                            cabinClass === cls 
-                                              ? 'bg-travel-blue text-white shadow-lg shadow-travel-blue/20' 
+                                          className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${cabinClass === cls
+                                              ? 'bg-travel-blue text-white shadow-lg shadow-travel-blue/20'
                                               : 'bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-travel-text'
-                                          }`}
+                                            }`}
                                         >
                                           {cls}
                                         </button>
@@ -856,7 +814,7 @@ export default function FlightsPage() {
                                     </div>
                                   </div>
 
-                                  <Button 
+                                  <Button
                                     className="w-full mt-2 rounded-[16px] bg-travel-text text-white h-11 font-black text-[10px] uppercase tracking-widest font-montserrat"
                                     onClick={() => setShowTravelerDropdown(false)}
                                   >
@@ -872,7 +830,7 @@ export default function FlightsPage() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 border-[1.5px] border-gray-100 rounded-[20px] shadow-sm bg-white hover:border-gray-200 transition-all duration-300 relative z-30 mb-8">
-                    <div 
+                    <div
                       className="lg:col-span-3 p-5 border-b lg:border-b-0 lg:border-r-[1.5px] border-gray-100 hover:bg-blue-50/30 transition-all cursor-pointer group/item relative"
                       onClick={() => {
                         setShowFromDropdown(!showFromDropdown);
@@ -891,7 +849,7 @@ export default function FlightsPage() {
                         {showFromDropdown && (
                           <>
                             <div className="fixed inset-0 z-40" onClick={() => setShowFromDropdown(false)} />
-                            <motion.div 
+                            <motion.div
                               initial={{ opacity: 0, y: 10, scale: 0.95 }}
                               animate={{ opacity: 1, y: 0, scale: 1 }}
                               exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -903,7 +861,7 @@ export default function FlightsPage() {
                               </div>
                               <div className="max-h-60 overflow-y-auto">
                                 {CITIES.map(city => (
-                                  <button 
+                                  <button
                                     key={city.code}
                                     onClick={() => {
                                       setFromCity(city);
@@ -925,7 +883,7 @@ export default function FlightsPage() {
                       </AnimatePresence>
 
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 hidden lg:block">
-                        <div 
+                        <div
                           onClick={handleSwap}
                           className="w-8 h-8 rounded-full bg-white border border-gray-100 shadow-md flex items-center justify-center text-travel-blue hover:bg-travel-blue hover:text-white transition-all cursor-pointer"
                         >
@@ -934,7 +892,7 @@ export default function FlightsPage() {
                       </div>
                     </div>
 
-                    <div 
+                    <div
                       className="lg:col-span-3 p-5 border-b lg:border-b-0 lg:border-r-[1.5px] border-gray-100 hover:bg-blue-50/30 transition-all cursor-pointer group/item relative"
                       onClick={() => {
                         setShowToDropdown(!showToDropdown);
@@ -953,7 +911,7 @@ export default function FlightsPage() {
                         {showToDropdown && (
                           <>
                             <div className="fixed inset-0 z-40" onClick={() => setShowToDropdown(false)} />
-                            <motion.div 
+                            <motion.div
                               initial={{ opacity: 0, y: 10, scale: 0.95 }}
                               animate={{ opacity: 1, y: 0, scale: 1 }}
                               exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -965,7 +923,7 @@ export default function FlightsPage() {
                               </div>
                               <div className="max-h-60 overflow-y-auto">
                                 {CITIES.map(city => (
-                                  <button 
+                                  <button
                                     key={city.code}
                                     onClick={() => {
                                       setToCity(city);
@@ -997,9 +955,8 @@ export default function FlightsPage() {
                       </div>
                     </div>
 
-                    <div className={`lg:col-span-2 p-5 border-b lg:border-b-0 lg:border-r-[1.5px] border-gray-100 transition-all cursor-pointer group/item relative text-center lg:text-left ${
-                      tripType === 'oneWay' ? 'bg-[#fafafa] cursor-not-allowed opacity-30 select-none' : 'hover:bg-blue-50/30'
-                    }`}>
+                    <div className={`lg:col-span-2 p-5 border-b lg:border-b-0 lg:border-r-[1.5px] border-gray-100 transition-all cursor-pointer group/item relative text-center lg:text-left ${tripType === 'oneWay' ? 'bg-[#fafafa] cursor-not-allowed opacity-30 select-none' : 'hover:bg-blue-50/30'
+                      }`}>
                       <span className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] block mb-2 group-hover/item:text-travel-blue transition-colors font-montserrat">Return</span>
                       <div className="flex flex-col font-montserrat">
                         <div className="text-xl font-black text-travel-text tracking-tight flex items-baseline gap-2 justify-center lg:justify-start">
@@ -1009,7 +966,7 @@ export default function FlightsPage() {
                       </div>
                     </div>
 
-                    <div 
+                    <div
                       className="lg:col-span-2 p-5 hover:bg-blue-50/30 transition-all cursor-pointer group/item relative text-center lg:text-left"
                       onClick={() => {
                         setShowTravelerDropdown(!showTravelerDropdown);
@@ -1048,18 +1005,17 @@ export default function FlightsPage() {
                                       <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{item.sub}</span>
                                     </div>
                                     <div className="flex items-center gap-4">
-                                      <button 
+                                      <button
                                         onClick={() => item.setState(Math.max(item.min, item.state - 1))}
-                                        className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
-                                          item.state > item.min 
-                                            ? 'border-travel-blue/20 text-travel-blue hover:bg-travel-blue hover:text-white hover:border-travel-blue' 
+                                        className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${item.state > item.min
+                                            ? 'border-travel-blue/20 text-travel-blue hover:bg-travel-blue hover:text-white hover:border-travel-blue'
                                             : 'border-gray-50 text-gray-200 cursor-not-allowed'
-                                        }`}
+                                          }`}
                                       >
                                         <Minus className="w-3 h-3" />
                                       </button>
                                       <span className="text-sm font-black text-travel-text w-4 text-center font-montserrat">{item.state}</span>
-                                      <button 
+                                      <button
                                         onClick={() => item.setState(Math.min(9, item.state + 1))}
                                         className="w-8 h-8 rounded-full border border-travel-blue/20 flex items-center justify-center text-travel-blue hover:bg-travel-blue hover:text-white hover:border-travel-blue transition-all"
                                       >
@@ -1073,14 +1029,13 @@ export default function FlightsPage() {
                                   <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-4 underline decoration-travel-blue/30 underline-offset-4 font-montserrat">Cabin Class</span>
                                   <div className="flex flex-wrap gap-2">
                                     {['Economy', 'Premium', 'Business'].map((cls) => (
-                                      <button 
+                                      <button
                                         key={cls}
                                         onClick={() => setCabinClass(cls)}
-                                        className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
-                                          cabinClass === cls 
-                                            ? 'bg-travel-blue text-white shadow-lg shadow-travel-blue/20' 
+                                        className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${cabinClass === cls
+                                            ? 'bg-travel-blue text-white shadow-lg shadow-travel-blue/20'
                                             : 'bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-travel-text'
-                                        }`}
+                                          }`}
                                       >
                                         {cls}
                                       </button>
@@ -1088,7 +1043,7 @@ export default function FlightsPage() {
                                   </div>
                                 </div>
 
-                                <Button 
+                                <Button
                                   className="w-full mt-2 rounded-[16px] bg-travel-text text-white h-11 font-black text-[10px] uppercase tracking-widest font-montserrat"
                                   onClick={() => setShowTravelerDropdown(false)}
                                 >
@@ -1116,15 +1071,15 @@ export default function FlightsPage() {
                       <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Checking 150+ travel patterns</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-3 w-full sm:w-auto">
-                    <button 
+                    <button
                       onClick={() => setIsEditingSearch(false)}
                       className="flex-1 sm:flex-none px-8 py-4 rounded-[16px] font-black text-[9px] uppercase tracking-[0.2em] text-gray-400 border border-gray-100 hover:bg-gray-50 transition-all font-montserrat"
                     >
                       Dismiss
                     </button>
-                    <Button 
+                    <Button
                       className="flex-1 sm:flex-none gradient-blue text-white px-10 py-4 rounded-[16px] font-black text-[9px] uppercase tracking-[0.2em] shadow-xl shadow-travel-blue/20 hover:shadow-glow transition-all active:scale-95 font-montserrat"
                       onClick={() => setIsEditingSearch(false)}
                     >
@@ -1142,14 +1097,14 @@ export default function FlightsPage() {
       <AnimatePresence>
         {showFareRules && (
           <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-[#0a223d]/80 backdrop-blur-md"
               onClick={() => setShowFareRules(false)}
             />
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -1166,7 +1121,7 @@ export default function FlightsPage() {
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">{fromCity.code} → {toCity.code} Flight</p>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setShowFareRules(false)}
                     className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all"
                   >
@@ -1220,7 +1175,7 @@ export default function FlightsPage() {
                   <p className="text-[9px] font-bold text-gray-400 uppercase tracking-[0.2em] leading-relaxed">
                     * Terms and conditions apply. Fare rules are subject to change by the airline without prior notice.
                   </p>
-                  <Button 
+                  <Button
                     onClick={() => setShowFareRules(false)}
                     className="mt-6 w-full rounded-2xl bg-travel-text text-white py-6 font-black text-xs uppercase tracking-widest"
                   >
